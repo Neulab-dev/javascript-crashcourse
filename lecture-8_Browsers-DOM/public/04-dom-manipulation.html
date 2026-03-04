@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Manipulation - Create, Insert, Remove, Clone</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #2c3e50;
+        border-bottom: 3px solid #27ae60;
+        padding-bottom: 0.5rem;
+      }
+
+      h2 {
+        color: #34495e;
+        margin-top: 1.5rem;
+        border-left: 4px solid #27ae60;
+        padding-left: 0.5rem;
+      }
+
+      .container {
+        background-color: white;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .demo-area {
+        background-color: #f0f8f0;
+        border: 2px dashed #27ae60;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        min-height: 100px;
+      }
+
+      button {
+        background-color: #27ae60;
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      button:hover {
+        background-color: #229954;
+      }
+
+      button.danger {
+        background-color: #e74c3c;
+      }
+
+      button.danger:hover {
+        background-color: #c0392b;
+      }
+
+      .code-block {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        padding: 1rem;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+
+      .element-box {
+        background-color: #e8f8f5;
+        border-left: 4px solid #16a085;
+        padding: 0.75rem;
+        margin: 0.5rem 0;
+        border-radius: 3px;
+        position: relative;
+      }
+
+      .element-box:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .element-id {
+        color: #16a085;
+        font-weight: bold;
+        font-size: 0.85rem;
+      }
+
+      .remove-btn {
+        background-color: #e74c3c;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+        margin-left: auto;
+        float: right;
+      }
+
+      .info-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+
+      input {
+        padding: 0.5rem;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .button-group {
+        margin: 1rem 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .form-group {
+        margin: 1rem 0;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+
+      select {
+        padding: 0.5rem;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+      }
+
+      .counter {
+        background-color: #d1ecf1;
+        border-left: 4px solid #17a2b8;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        display: inline-block;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🛠️ DOM Manipulation - Create, Insert, Remove, Clone</h1>
+
+    <div class="info-box">
+      <strong>What you'll learn:</strong>
+      <ul>
+        <li><strong>createElement:</strong> Create new DOM elements</li>
+        <li><strong>appendChild:</strong> Add elements as children</li>
+        <li>
+          <strong>insertBefore:</strong> Insert elements at specific positions
+        </li>
+        <li><strong>removeChild:</strong> Remove elements from DOM</li>
+        <li><strong>remove:</strong> Remove element itself</li>
+        <li><strong>cloneNode:</strong> Duplicate elements</li>
+      </ul>
+    </div>
+
+    <h2>1. Creating Elements with createElement</h2>
+    <div class="container">
+      <p>Create new elements and add them to the page:</p>
+
+      <div class="code-block">
+        const div = document.createElement('div'); div.textContent = 'New
+        element'; div.className = 'element-box'; parent.appendChild(div);
+      </div>
+
+      <h3>Demo:</h3>
+      <button onclick="demo1CreateSimple()">Create Simple Div</button>
+      <button onclick="demo1CreateWithAttrs()">Create with Attributes</button>
+      <button onclick="demo1CreateWithEvent()">
+        Create with Event Listener
+      </button>
+
+      <div id="demo1Area" class="demo-area"></div>
+    </div>
+
+    <h2>2. appendChild - Adding Elements to Parent</h2>
+    <div class="container">
+      <p>Add elements to the end of a parent element:</p>
+
+      <div class="code-block">
+        const parent = document.getElementById('parent'); const newChild =
+        document.createElement('div'); parent.appendChild(newChild); // Adds as
+        last child
+      </div>
+
+      <h3>Demo:</h3>
+      <button onclick="demo2AppendMultiple()">Append 3 Items</button>
+      <button onclick="demo2AppendWithContent()">
+        Append with Different Content
+      </button>
+      <button onclick="demo2Clear()">Clear All</button>
+
+      <div id="demo2Area" class="demo-area"></div>
+    </div>
+
+    <h2>3. insertBefore - Insert at Specific Position</h2>
+    <div class="container">
+      <p>Insert an element before a specific child:</p>
+
+      <div class="code-block">
+        const parent = document.getElementById('parent'); const newElement =
+        document.createElement('div'); const targetChild = parent.children[0];
+        parent.insertBefore(newElement, targetChild); // Inserts before first
+        child
+      </div>
+
+      <h3>Demo:</h3>
+      <div class="button-group">
+        <button onclick="demo3SetupList()">Create Initial List</button>
+        <button onclick="demo3InsertAtBeginning()">Insert at Beginning</button>
+        <button onclick="demo3InsertAtIndex()">Insert at Index 1</button>
+        <button onclick="demo3InsertAtEnd()">Insert at End</button>
+        <button onclick="demo3Clear()">Clear</button>
+      </div>
+
+      <div id="demo3Area" class="demo-area"></div>
+    </div>
+
+    <h2>4. removeChild - Remove Child Element</h2>
+    <div class="container">
+      <p>Remove a specific child element from its parent:</p>
+
+      <div class="code-block">
+        const parent = document.getElementById('parent'); const childToRemove =
+        parent.children[0]; parent.removeChild(childToRemove); // Removes the
+        child
+      </div>
+
+      <h3>Demo:</h3>
+      <div class="button-group">
+        <button onclick="demo4Setup()">Create Elements</button>
+        <button onclick="demo4RemoveFirst()">Remove First</button>
+        <button onclick="demo4RemoveLast()">Remove Last</button>
+        <button onclick="demo4RemoveIndex()">Remove at Index 1</button>
+        <button onclick="demo4Clear()">Clear All</button>
+      </div>
+
+      <div id="demo4Area" class="demo-area"></div>
+    </div>
+
+    <h2>5. remove() - Remove Element Itself</h2>
+    <div class="container">
+      <p>An element can remove itself directly (without needing parent):</p>
+
+      <div class="code-block">
+        const element = document.getElementById('myElement'); element.remove();
+        // Removes itself from DOM
+      </div>
+
+      <h3>Demo:</h3>
+      <div class="button-group">
+        <button onclick="demo5Setup()">Create Clickable Items</button>
+        <button onclick="demo5Clear()">Clear All</button>
+      </div>
+
+      <div id="demo5Area" class="demo-area">
+        <p><small>Click on items to remove them individually</small></p>
+      </div>
+    </div>
+
+    <h2>6. cloneNode - Duplicate Elements</h2>
+    <div class="container">
+      <p>Create an exact copy of an element and its children:</p>
+
+      <div class="code-block">
+        const original = document.getElementById('element'); const clone =
+        original.cloneNode(true); // true = deep clone (includes children)
+        parent.appendChild(clone);
+      </div>
+
+      <h3>Demo:</h3>
+      <div class="button-group">
+        <button onclick="demo6Setup()">Setup Template</button>
+        <button onclick="demo6CloneShallow()">
+          Clone Shallow (without children)
+        </button>
+        <button onclick="demo6CloneDeep()">Clone Deep (with children)</button>
+        <button onclick="demo6Clear()">Clear</button>
+      </div>
+
+      <div
+        id="demo6Template"
+        class="demo-area"
+        style="background-color: #fff3cd; border-color: #f39c12"
+      >
+        <div class="element-box">
+          <div class="element-id">Original Template</div>
+          <p>This is the template</p>
+          <button style="padding: 0.3rem 0.6rem; font-size: 0.8rem">
+            Click me
+          </button>
+        </div>
+      </div>
+
+      <div id="demo6Area" class="demo-area"></div>
+    </div>
+
+    <h2>7. Building Complex Structures</h2>
+    <div class="container">
+      <p>
+        Combine creation, insertion, and properties to build complex structures:
+      </p>
+
+      <div class="form-group">
+        <label for="itemInput">Item Name:</label>
+        <input type="text" id="itemInput" placeholder="Enter item name" />
+      </div>
+
+      <div class="form-group">
+        <label for="colorSelect">Item Color:</label>
+        <select id="colorSelect">
+          <option value="#e8f8f5">Green</option>
+          <option value="#d1ecf1">Blue</option>
+          <option value="#fff3cd">Yellow</option>
+          <option value="#f8d7da">Red</option>
+        </select>
+      </div>
+
+      <button onclick="demo7AddItem()">Add Item</button>
+      <button onclick="demo7Clear()">Clear All</button>
+
+      <div id="demo7Area" class="demo-area"></div>
+      <p><small>Click the X button on items to remove them</small></p>
+    </div>
+
+    <h2>8. Replacing Elements</h2>
+    <div class="container">
+      <p>Replace one element with another using appendChild (moves element):</p>
+
+      <div class="code-block">
+        const parent = document.getElementById('parent'); const newChild =
+        document.createElement('div'); const oldChild = parent.children[0];
+        parent.replaceChild(newChild, oldChild); // Replaces oldChild with
+        newChild
+      </div>
+
+      <h3>Demo:</h3>
+      <div class="button-group">
+        <button onclick="demo8Setup()">Setup Items</button>
+        <button onclick="demo8ReplaceFirst()">Replace First Item</button>
+        <button onclick="demo8SwapItems()">Swap First and Last</button>
+        <button onclick="demo8Clear()">Clear</button>
+      </div>
+
+      <div id="demo8Area" class="demo-area"></div>
+    </div>
+
+    <h2>9. Performance Considerations</h2>
+    <div class="container">
+      <p>Adding many elements one by one can be slow. Better approach:</p>
+
+      <div class="code-block">
+        // ❌ SLOW - causes many reflows for (let i = 0; i &lt; 1000; i++) {
+        const div = document.createElement('div'); container.appendChild(div);
+        // Each appendChild causes reflow } // ✓ FAST - single reflow const
+        fragment = document.createDocumentFragment(); for (let i = 0; i &lt;
+        1000; i++) { const div = document.createElement('div');
+        fragment.appendChild(div); } container.appendChild(fragment); // Single
+        reflow
+      </div>
+
+      <h3>Demo:</h3>
+      <div class="button-group">
+        <button onclick="demo9SlowWay()">Add 100 Items (Slow Way)</button>
+        <button onclick="demo9FastWay()">Add 100 Items (Fast Way)</button>
+        <button onclick="demo9Clear()">Clear</button>
+      </div>
+
+      <div id="demo9Area" class="demo-area"></div>
+      <p id="demo9Timer"></p>
+    </div>
+
+    <h2>📊 Method Comparison</h2>
+    <div class="container">
+      <table style="width: 100%; border-collapse: collapse">
+        <tr style="background-color: #34495e; color: white">
+          <th style="padding: 0.5rem; border: 1px solid #bdc3c7">Method</th>
+          <th style="padding: 0.5rem; border: 1px solid #bdc3c7">Purpose</th>
+          <th style="padding: 0.5rem; border: 1px solid #bdc3c7">Example</th>
+        </tr>
+        <tr>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            <strong>createElement</strong>
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            Create new element
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            document.createElement('div')
+          </td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            <strong>appendChild</strong>
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            Add as last child
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            parent.appendChild(child)
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            <strong>insertBefore</strong>
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            Insert before specific element
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            parent.insertBefore(new, old)
+          </td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            <strong>removeChild</strong>
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            Remove specific child
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            parent.removeChild(child)
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            <strong>remove</strong>
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            Remove element itself
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            element.remove()
+          </td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            <strong>cloneNode</strong>
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            Duplicate element
+          </td>
+          <td style="padding: 0.5rem; border: 1px solid #bdc3c7">
+            element.cloneNode(true)
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <script>
+      let itemCounter = 0;
+
+      // Demo 1
+      function demo1CreateSimple() {
+        const area = document.getElementById("demo1Area");
+        const div = document.createElement("div");
+        div.textContent = "New element created!";
+        div.className = "element-box";
+        area.appendChild(div);
+      }
+
+      function demo1CreateWithAttrs() {
+        const area = document.getElementById("demo1Area");
+        const div = document.createElement("div");
+        div.className = "element-box";
+        div.id = "myElement" + Date.now();
+        div.style.backgroundColor = "#d1ecf1";
+        div.textContent = "Element with ID: " + div.id;
+        area.appendChild(div);
+      }
+
+      function demo1CreateWithEvent() {
+        const area = document.getElementById("demo1Area");
+        const div = document.createElement("div");
+        div.className = "element-box";
+        div.textContent = "Click me!";
+        div.style.cursor = "pointer";
+        div.addEventListener("click", () => alert("You clicked the element!"));
+        area.appendChild(div);
+      }
+
+      // Demo 2
+      function demo2AppendMultiple() {
+        const area = document.getElementById("demo2Area");
+        for (let i = 1; i <= 3; i++) {
+          const div = document.createElement("div");
+          div.className = "element-box";
+          div.textContent = "Item " + i;
+          area.appendChild(div);
+        }
+      }
+
+      function demo2AppendWithContent() {
+        const area = document.getElementById("demo2Area");
+        const contents = ["First", "Second", "Third"];
+        contents.forEach((content) => {
+          const div = document.createElement("div");
+          div.className = "element-box";
+          div.textContent = content + " item appended";
+          area.appendChild(div);
+        });
+      }
+
+      function demo2Clear() {
+        document.getElementById("demo2Area").innerHTML = "";
+      }
+
+      // Demo 3
+      function demo3SetupList() {
+        const area = document.getElementById("demo3Area");
+        area.innerHTML = "";
+        for (let i = 0; i < 3; i++) {
+          const div = document.createElement("div");
+          div.className = "element-box";
+          div.textContent = "Position " + i;
+          area.appendChild(div);
+        }
+      }
+
+      function demo3InsertAtBeginning() {
+        const area = document.getElementById("demo3Area");
+        if (area.children.length === 0) {
+          alert("Create initial list first");
+          return;
+        }
+        const newDiv = document.createElement("div");
+        newDiv.className = "element-box";
+        newDiv.textContent = "NEW - Inserted at beginning";
+        newDiv.style.backgroundColor = "#d4edda";
+        area.insertBefore(newDiv, area.children[0]);
+      }
+
+      function demo3InsertAtIndex() {
+        const area = document.getElementById("demo3Area");
+        if (area.children.length < 2) {
+          alert("Need at least 2 items");
+          return;
+        }
+        const newDiv = document.createElement("div");
+        newDiv.className = "element-box";
+        newDiv.textContent = "NEW - Inserted at index 1";
+        newDiv.style.backgroundColor = "#d4edda";
+        area.insertBefore(newDiv, area.children[1]);
+      }
+
+      function demo3InsertAtEnd() {
+        const area = document.getElementById("demo3Area");
+        const newDiv = document.createElement("div");
+        newDiv.className = "element-box";
+        newDiv.textContent = "NEW - Appended at end";
+        newDiv.style.backgroundColor = "#d4edda";
+        area.appendChild(newDiv);
+      }
+
+      function demo3Clear() {
+        document.getElementById("demo3Area").innerHTML = "";
+      }
+
+      // Demo 4
+      function demo4Setup() {
+        const area = document.getElementById("demo4Area");
+        area.innerHTML = "";
+        for (let i = 1; i <= 4; i++) {
+          const div = document.createElement("div");
+          div.className = "element-box";
+          div.textContent = "Item " + i;
+          area.appendChild(div);
+        }
+      }
+
+      function demo4RemoveFirst() {
+        const area = document.getElementById("demo4Area");
+        if (area.children.length > 0) {
+          area.removeChild(area.children[0]);
+        }
+      }
+
+      function demo4RemoveLast() {
+        const area = document.getElementById("demo4Area");
+        if (area.children.length > 0) {
+          area.removeChild(area.children[area.children.length - 1]);
+        }
+      }
+
+      function demo4RemoveIndex() {
+        const area = document.getElementById("demo4Area");
+        if (area.children.length > 1) {
+          area.removeChild(area.children[1]);
+        }
+      }
+
+      function demo4Clear() {
+        document.getElementById("demo4Area").innerHTML = "";
+      }
+
+      // Demo 5
+      function demo5Setup() {
+        const area = document.getElementById("demo5Area");
+        area.innerHTML =
+          "<p><small>Click on items to remove them individually</small></p>";
+        for (let i = 1; i <= 4; i++) {
+          const div = document.createElement("div");
+          div.className = "element-box";
+          div.textContent = "Clickable Item " + i + " - Click to remove";
+          div.style.cursor = "pointer";
+          div.addEventListener("click", function () {
+            this.remove();
+          });
+          area.appendChild(div);
+        }
+      }
+
+      function demo5Clear() {
+        document.getElementById("demo5Area").innerHTML =
+          "<p><small>Click on items to remove them individually</small></p>";
+      }
+
+      // Demo 6
+      function demo6Setup() {
+        const template = document.getElementById("demo6Template");
+        const cloneArea = document.getElementById("demo6Area");
+        cloneArea.innerHTML = "";
+      }
+
+      function demo6CloneShallow() {
+        const template = document.getElementById("demo6Template").children[0];
+        const clone = template.cloneNode(false); // Shallow clone
+        clone.textContent = "Shallow Clone (no children)";
+        clone.style.backgroundColor = "#d1ecf1";
+        document.getElementById("demo6Area").appendChild(clone);
+      }
+
+      function demo6CloneDeep() {
+        const template = document.getElementById("demo6Template").children[0];
+        const clone = template.cloneNode(true); // Deep clone
+        clone.style.backgroundColor = "#d4edda";
+        document.getElementById("demo6Area").appendChild(clone);
+      }
+
+      function demo6Clear() {
+        document.getElementById("demo6Area").innerHTML = "";
+      }
+
+      // Demo 7
+      function demo7AddItem() {
+        const input = document.getElementById("itemInput");
+        const select = document.getElementById("colorSelect");
+        const area = document.getElementById("demo7Area");
+
+        if (!input.value.trim()) {
+          alert("Enter an item name");
+          return;
+        }
+
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "element-box";
+        itemDiv.style.backgroundColor = select.value;
+        itemDiv.style.display = "flex";
+        itemDiv.style.justifyContent = "space-between";
+        itemDiv.style.alignItems = "center";
+
+        const text = document.createElement("span");
+        text.textContent = input.value;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "✕ Remove";
+        removeBtn.className = "remove-btn";
+        removeBtn.style.float = "none";
+        removeBtn.style.marginLeft = "auto";
+        removeBtn.addEventListener("click", function () {
+          itemDiv.remove();
+        });
+
+        itemDiv.appendChild(text);
+        itemDiv.appendChild(removeBtn);
+        area.appendChild(itemDiv);
+        input.value = "";
+        input.focus();
+      }
+
+      function demo7Clear() {
+        document.getElementById("demo7Area").innerHTML = "";
+      }
+
+      // Demo 8
+      function demo8Setup() {
+        const area = document.getElementById("demo8Area");
+        area.innerHTML = "";
+        for (let i = 1; i <= 4; i++) {
+          const div = document.createElement("div");
+          div.className = "element-box";
+          div.textContent = "Item " + i;
+          div.id = "item" + i;
+          area.appendChild(div);
+        }
+      }
+
+      function demo8ReplaceFirst() {
+        const area = document.getElementById("demo8Area");
+        if (area.children.length === 0) {
+          alert("Setup items first");
+          return;
+        }
+        const newDiv = document.createElement("div");
+        newDiv.className = "element-box";
+        newDiv.textContent = "REPLACED ITEM";
+        newDiv.style.backgroundColor = "#d4edda";
+        area.replaceChild(newDiv, area.children[0]);
+      }
+
+      function demo8SwapItems() {
+        const area = document.getElementById("demo8Area");
+        if (area.children.length < 2) {
+          alert("Need at least 2 items");
+          return;
+        }
+        const first = area.children[0];
+        const last = area.children[area.children.length - 1];
+        area.insertBefore(last.cloneNode(true), first);
+        area.removeChild(last);
+      }
+
+      function demo8Clear() {
+        document.getElementById("demo8Area").innerHTML = "";
+      }
+
+      // Demo 9
+      function demo9SlowWay() {
+        const area = document.getElementById("demo9Area");
+        area.innerHTML = "";
+        const timer = document.getElementById("demo9Timer");
+
+        const start = performance.now();
+
+        for (let i = 0; i < 100; i++) {
+          const div = document.createElement("div");
+          div.className = "element-box";
+          div.textContent = "Item " + (i + 1);
+          area.appendChild(div); // Each triggers reflow
+        }
+
+        const end = performance.now();
+        timer.textContent = `⏱️ Time (slow way): ${(end - start).toFixed(2)}ms`;
+      }
+
+      function demo9FastWay() {
+        const area = document.getElementById("demo9Area");
+        area.innerHTML = "";
+        const timer = document.getElementById("demo9Timer");
+
+        const start = performance.now();
+
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < 100; i++) {
+          const div = document.createElement("div");
+          div.className = "element-box";
+          div.textContent = "Item " + (i + 1);
+          fragment.appendChild(div);
+        }
+        area.appendChild(fragment); // Single reflow
+
+        const end = performance.now();
+        timer.textContent = `⏱️ Time (fast way with fragment): ${(end - start).toFixed(2)}ms`;
+      }
+
+      function demo9Clear() {
+        document.getElementById("demo9Area").innerHTML = "";
+        document.getElementById("demo9Timer").textContent = "";
+      }
+    </script>
+  </body>
+</html>

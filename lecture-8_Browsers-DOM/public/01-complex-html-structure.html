@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complex HTML Structure</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f4f4f4;
+      }
+
+      header {
+        background-color: #2c3e50;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      main {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      section {
+        background-color: white;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 0.5rem;
+      }
+
+      h3 {
+        color: #34495e;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .box {
+        background-color: #ecf0f1;
+        padding: 1rem;
+        border-left: 4px solid #3498db;
+        border-radius: 3px;
+      }
+
+      ul,
+      ol {
+        margin: 1rem 0 1rem 2rem;
+      }
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+
+      .nested-list {
+        margin-left: 2rem;
+        margin-top: 0.5rem;
+      }
+
+      p {
+        margin-bottom: 0.5rem;
+      }
+
+      .highlight {
+        background-color: #fff9e6;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+      }
+
+      footer {
+        background-color: #2c3e50;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>🏗️ Complex HTML Structure Demo</h1>
+      <p>Understanding nested elements and document structure</p>
+    </header>
+
+    <main>
+      <section>
+        <h2>Introduction Section</h2>
+        <p>
+          This page demonstrates a more complex HTML structure with multiple
+          nested elements, including:
+        </p>
+        <ul>
+          <li>Multiple sections and containers</li>
+          <li>Nested lists with various levels</li>
+          <li>Different paragraph structures</li>
+          <li>Grouped content with divs</li>
+          <li>Multiple heading levels</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Content Organization</h2>
+
+        <h3>Main Topics</h3>
+        <ul>
+          <li>
+            Web Development
+            <ol class="nested-list">
+              <li>Frontend Technologies</li>
+              <li>Backend Development</li>
+              <li>Databases</li>
+            </ol>
+          </li>
+          <li>
+            JavaScript Concepts
+            <ol class="nested-list">
+              <li>Variables and Types</li>
+              <li>Functions and Scope</li>
+              <li>Asynchronous Programming</li>
+              <li>DOM Manipulation</li>
+            </ol>
+          </li>
+          <li>Programming Best Practices</li>
+        </ul>
+
+        <h3>Feature Highlights</h3>
+        <div class="container">
+          <div class="box">
+            <h4>Feature 1</h4>
+            <p>Responsive design that works on all devices</p>
+          </div>
+          <div class="box">
+            <h4>Feature 2</h4>
+            <p>Clean and semantic HTML structure</p>
+          </div>
+          <div class="box">
+            <h4>Feature 3</h4>
+            <p>Comprehensive CSS styling</p>
+          </div>
+          <div class="box">
+            <h4>Feature 4</h4>
+            <p>Interactive JavaScript functionality</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Detailed Information</h2>
+        <div>
+          <h3>Article 1</h3>
+          <p>
+            This is the first article with
+            <span class="highlight">highlighted text</span> to demonstrate
+            inline elements.
+          </p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+
+        <div>
+          <h3>Article 2</h3>
+          <p>
+            Another article in the section demonstrating multiple paragraphs.
+          </p>
+          <p>
+            Multiple paragraphs allow for better content organization and
+            readability.
+          </p>
+          <p>This final paragraph concludes the second article.</p>
+        </div>
+
+        <div>
+          <h3>Article 3</h3>
+          <ul>
+            <li>Point one about the article</li>
+            <li>Point two with additional information</li>
+            <li>Point three concluding the article</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>Nested Structure Example</h2>
+        <div class="container">
+          <div>
+            <h3>Left Column</h3>
+            <div>
+              <h4>Subsection A</h4>
+              <p>Content for subsection A</p>
+              <ul>
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <h3>Right Column</h3>
+            <div>
+              <h4>Subsection B</h4>
+              <p>Content for subsection B</p>
+              <ol>
+                <li>First step</li>
+                <li>Second step</li>
+                <li>Third step</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 DOM Learning Course. All rights reserved.</p>
+    </footer>
+
+    <script>
+      console.log("Complex HTML Structure loaded!");
+      console.log(
+        "Total sections:",
+        document.querySelectorAll("section").length,
+      );
+      console.log("Total divs:", document.querySelectorAll("div").length);
+      console.log("Total list items:", document.querySelectorAll("li").length);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BOM - Navigation and History</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #2c3e50;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 0.5rem;
+      }
+
+      h2 {
+        color: #34495e;
+        margin-top: 1.5rem;
+      }
+
+      .info-box {
+        background-color: white;
+        border-left: 4px solid #3498db;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .code-block {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+        font-family: "Courier New", monospace;
+        overflow-x: auto;
+      }
+
+      button {
+        background-color: #3498db;
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+      }
+
+      button:hover {
+        background-color: #2980b9;
+      }
+
+      button.danger {
+        background-color: #e74c3c;
+      }
+
+      button.danger:hover {
+        background-color: #c0392b;
+      }
+
+      .button-group {
+        margin: 1rem 0;
+        padding: 1rem;
+        background-color: white;
+        border-radius: 4px;
+      }
+
+      .output {
+        background-color: #ecf0f1;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+        font-family: "Courier New", monospace;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      .warning {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+
+      th,
+      td {
+        border: 1px solid #bdc3c7;
+        padding: 0.75rem;
+        text-align: left;
+      }
+
+      th {
+        background-color: #34495e;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #ecf0f1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Browser Object Model (BOM) - Navigation & History</h1>
+
+    <div class="info-box">
+      <p>
+        The BOM (Browser Object Model) provides access to browser-level APIs
+        through the <code>window</code> object. This page demonstrates:
+      </p>
+      <ul>
+        <li><strong>window.location</strong> - Current URL and navigation</li>
+        <li><strong>window.history</strong> - Browser history navigation</li>
+        <li>
+          <strong>window.navigator</strong> - Browser and device information
+        </li>
+      </ul>
+    </div>
+
+    <h2>Window Location Information</h2>
+    <div class="button-group">
+      <button onclick="showLocationInfo()">Show Location Info</button>
+      <button onclick="showLocationProperties()">Show All Properties</button>
+    </div>
+
+    <div id="locationOutput" class="output" style="display: none">
+      Location info will appear here...
+    </div>
+
+    <h2>Navigation Methods</h2>
+    <div class="info-box">
+      <p>
+        <strong>Note:</strong> These methods will navigate away from this page.
+        Use with caution!
+      </p>
+    </div>
+
+    <div class="button-group">
+      <button onclick="goToMdn()">Go to MDN Web Docs</button>
+      <button onclick="reloadPage()">Reload Current Page</button>
+      <button onclick="goBackInHistory()">Go Back (history.back())</button>
+    </div>
+
+    <h2>History Information</h2>
+    <div class="button-group">
+      <button onclick="showHistoryInfo()">Show History Info</button>
+    </div>
+
+    <div id="historyOutput" class="output" style="display: none">
+      History info will appear here...
+    </div>
+
+    <h2>Navigator Information</h2>
+    <div class="button-group">
+      <button onclick="showNavigatorInfo()">Show Browser/Device Info</button>
+    </div>
+
+    <div id="navigatorOutput" class="output" style="display: none">
+      Navigator info will appear here...
+    </div>
+
+    <h2>Window Object Properties</h2>
+    <div class="button-group">
+      <button onclick="showWindowProperties()">Show Window Properties</button>
+    </div>
+
+    <div id="windowOutput" class="output" style="display: none">
+      Window properties will appear here...
+    </div>
+
+    <h2>Location Search Parameters Demo</h2>
+    <div class="info-box">
+      <p>
+        Add <code>?name=John&age=30&city=NYC</code> to the URL to see search
+        parameters in action.
+      </p>
+    </div>
+    <div class="button-group">
+      <button onclick="showSearchParams()">Show URL Parameters</button>
+    </div>
+
+    <div id="searchParamsOutput" class="output" style="display: none">
+      Search params will appear here...
+    </div>
+
+    <h2>Local vs Session Storage Preview</h2>
+    <div class="button-group">
+      <button onclick="setStorageData()">Set Storage Data</button>
+      <button onclick="getStorageData()">Get Storage Data</button>
+      <button onclick="clearStorageData()">Clear Storage Data</button>
+    </div>
+
+    <div id="storageOutput" class="output" style="display: none">
+      Storage info will appear here...
+    </div>
+
+    <script>
+      function showLocationInfo() {
+        const output = document.getElementById("locationOutput");
+        output.style.display = "block";
+        output.textContent = `Current Page URL:
+${window.location.href}
+
+URL Components:
+- Protocol: ${window.location.protocol}
+- Host: ${window.location.host}
+- Hostname: ${window.location.hostname}
+- Port: ${window.location.port ?? "(not specified)"}
+- Pathname: ${window.location.pathname}
+- Search: ${window.location.search ?? "(none)"}
+- Hash: ${window.location.hash ?? "(none)"}
+- Origin: ${window.location.origin}`;
+      }
+
+      function showLocationProperties() {
+        const output = document.getElementById("locationOutput");
+        output.style.display = "block";
+
+        const props = Object.getOwnPropertyNames(window.location).filter(
+          (prop) => typeof window.location[prop] !== "function",
+        );
+
+        output.textContent = `All window.location Properties:
+${props.map((prop) => `${prop}: ${window.location[prop]}`).join("\n")}`;
+      }
+
+      function goToMdn() {
+        if (confirm("This will navigate to MDN Web Docs. Continue?")) {
+          window.location.href = "https://developer.mozilla.org/";
+        }
+      }
+
+      function reloadPage() {
+        // window.location.reload() - would reload the page
+        alert("window.location.reload() would reload this page.");
+        window.location.reload();
+      }
+
+      function goBackInHistory() {
+        alert(
+          "window.history.back() would go back one page. Currently there's no previous page.",
+        );
+      }
+
+      function showHistoryInfo() {
+        const output = document.getElementById("historyOutput");
+        output.style.display = "block";
+        output.textContent = `History Information:
+- window.history.length: ${window.history.length}
+
+Available Methods:
+- history.back() - Goes back one page (like back button)
+- history.forward() - Goes forward one page (like forward button)
+- history.go(n) - Goes to a specific point in history
+  - history.go(-1) is the same as back()
+  - history.go(1) is the same as forward()
+  - history.go(0) or history.go() reloads the page
+
+Current page is at position ${window.history.length - 1} in the history stack.`;
+      }
+
+      function showNavigatorInfo() {
+        const output = document.getElementById("navigatorOutput");
+        output.style.display = "block";
+
+        let navigatorInfo = `Browser & Device Information:
+
+Browser:
+- User Agent: ${navigator.userAgent}
+- App Name: ${navigator.appName}
+- App Version: ${navigator.appVersion}
+- App Code Name: ${navigator.appCodeName}
+
+Platform & OS:
+- Platform: ${navigator.platform}
+- Vendor: ${navigator.vendor}
+
+Capabilities:
+- Language: ${navigator.language}
+- Online: ${navigator.onLine}
+- Cookies Enabled: ${navigator.cookieEnabled}
+- Max Touch Points: ${navigator.maxTouchPoints}
+
+Hardware:
+- Processor Count: ${navigator.hardwareConcurrency ?? "Unknown"}
+- Device Memory (GB): ${navigator.deviceMemory ?? "Unknown"}
+
+Location Services:
+- Geolocation: ${navigator.geolocation ? "Available" : "Not Available"}`;
+
+        output.textContent = navigatorInfo;
+      }
+
+      function showWindowProperties() {
+        const output = document.getElementById("windowOutput");
+        output.style.display = "block";
+
+        output.textContent = `Important Window Object Properties:
+
+Dimensions:
+- window.innerWidth: ${window.innerWidth}px
+- window.innerHeight: ${window.innerHeight}px
+- window.outerWidth: ${window.outerWidth}px
+- window.outerHeight: ${window.outerHeight}px
+- window.screen.width: ${window.screen.width}px
+- window.screen.height: ${window.screen.height}px
+- window.screen.availWidth: ${window.screen.availWidth}px
+- window.screen.availHeight: ${window.screen.availHeight}px
+
+Scroll Position:
+- window.scrollX: ${window.scrollX}px
+- window.scrollY: ${window.scrollY}px
+
+Performance:
+- window.devicePixelRatio: ${window.devicePixelRatio}
+
+Common Objects:
+- window.console - Browser console
+- window.document - DOM document
+- window.localStorage - Persistent storage
+- window.sessionStorage - Session storage
+- window.navigator - Browser info
+- window.location - URL and navigation
+- window.history - Navigation history`;
+      }
+
+      function showSearchParams() {
+        const output = document.getElementById("searchParamsOutput");
+        output.style.display = "block";
+
+        const params = new URLSearchParams(window.location.search);
+
+        if (params.toString() === "") {
+          output.textContent =
+            "No search parameters in current URL.\n\nTry adding ?name=John&age=30&city=NYC to the URL and refresh!";
+        } else {
+          let paramsText = "URL Search Parameters:\n\n";
+          for (let [key, value] of params) {
+            paramsText += `${key}: ${value}\n`;
+          }
+          output.textContent = paramsText;
+        }
+      }
+
+      function setStorageData() {
+        const output = document.getElementById("storageOutput");
+        output.style.display = "block";
+
+        localStorage.setItem("userName", "John Doe");
+        localStorage.setItem("userEmail", "john@example.com");
+        sessionStorage.setItem("sessionData", "This is only for this session");
+
+        output.textContent = `✓ Data stored successfully!
+
+localStorage:
+- userName: ${localStorage.getItem("userName")}
+- userEmail: ${localStorage.getItem("userEmail")}
+
+sessionStorage:
+- sessionData: ${sessionStorage.getItem("sessionData")}
+
+Note: localStorage persists across sessions.
+sessionStorage is cleared when the tab is closed.`;
+      }
+
+      function getStorageData() {
+        const output = document.getElementById("storageOutput");
+        output.style.display = "block";
+
+        const userName = localStorage.getItem("userName");
+        const userEmail = localStorage.getItem("userEmail");
+        const sessionData = sessionStorage.getItem("sessionData");
+
+        output.textContent = `Retrieved Storage Data:
+
+localStorage:
+- userName: ${userName ?? "(not set)"}
+- userEmail: ${userEmail ?? "(not set)"}
+
+sessionStorage:
+- sessionData: ${sessionData ?? "(not set)"}
+
+localStorage items count: ${localStorage.length}
+sessionStorage items count: ${sessionStorage.length}`;
+      }
+
+      function clearStorageData() {
+        const output = document.getElementById("storageOutput");
+        output.style.display = "block";
+
+        localStorage.clear();
+        sessionStorage.clear();
+
+        output.textContent = `✓ All storage data cleared!
+
+localStorage items count: ${localStorage.length}
+sessionStorage items count: ${sessionStorage.length}`;
+      }
+    </script>
+  </body>
+</html>

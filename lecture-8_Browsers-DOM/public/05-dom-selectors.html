@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Selectors - querySelector, getElementById, getElements</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #2c3e50;
+        border-bottom: 3px solid #9b59b6;
+        padding-bottom: 0.5rem;
+      }
+
+      h2 {
+        color: #34495e;
+        margin-top: 1.5rem;
+        border-left: 4px solid #9b59b6;
+        padding-left: 0.5rem;
+      }
+
+      .container {
+        background-color: white;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .example-elements {
+        background-color: #f0f0f0;
+        border: 2px dashed #9b59b6;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+
+      .sample-element {
+        background-color: #e8d5f2;
+        border-left: 4px solid #9b59b6;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-radius: 3px;
+      }
+
+      .sample-element.active {
+        background-color: #d4f1f4;
+        border-left-color: #3498db;
+      }
+
+      .sample-element.highlight {
+        background-color: #fff9e6;
+        border-left-color: #f39c12;
+      }
+
+      button {
+        background-color: #9b59b6;
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      button:hover {
+        background-color: #8e44ad;
+      }
+
+      .code-block {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        padding: 1rem;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+
+      .output-box {
+        background-color: #ecf0f1;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+        font-family: "Courier New", monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+
+      .info-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+
+      .warning-box {
+        background-color: #f8d7da;
+        border-left: 4px solid #dc3545;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+
+      .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        border: 1px solid #bdc3c7;
+        padding: 0.75rem;
+        text-align: left;
+      }
+
+      .comparison-table th {
+        background-color: #34495e;
+        color: white;
+      }
+
+      .comparison-table tr:nth-child(even) {
+        background-color: #ecf0f1;
+      }
+
+      .selector-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .selector-list li {
+        background-color: #f9f9f9;
+        padding: 0.75rem;
+        margin: 0.5rem 0;
+        border-left: 3px solid #9b59b6;
+        border-radius: 3px;
+      }
+
+      .selector-list code {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.9rem;
+      }
+
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+      }
+
+      .duplicate-warning {
+        background-color: #fff3cd;
+        border: 2px solid #ffc107;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>DOM Selectors - Querying Elements</h1>
+
+    <div class="info-box">
+      <strong>Different ways to select elements:</strong>
+      <ul>
+        <li>
+          <strong>getElementById:</strong> Select by ID (returns 1 element)
+        </li>
+        <li>
+          <strong>getElementsByClassName:</strong> Select by class name (returns
+          HTMLCollection)
+        </li>
+        <li>
+          <strong>getElementsByTagName:</strong> Select by tag name (returns
+          HTMLCollection)
+        </li>
+        <li>
+          <strong>querySelector:</strong> Select with CSS selector (returns 1st
+          match)
+        </li>
+        <li>
+          <strong>querySelectorAll:</strong> Select with CSS selector (returns
+          all matches)
+        </li>
+      </ul>
+    </div>
+
+    <h2>Test Elements</h2>
+    <div class="container">
+      <p>These elements are used throughout the demo:</p>
+
+      <div class="example-elements">
+        <div class="sample-element" id="element1">
+          <strong>Element 1</strong> - id="element1", class="sample-element"
+        </div>
+
+        <div class="sample-element" id="element2">
+          <strong>Element 2</strong> - id="element2", class="sample-element"
+        </div>
+
+        <div class="sample-element" id="element3" data-category="important">
+          <strong>Element 3</strong> - id="element3", data-category="important"
+        </div>
+
+        <div>
+          <div class="nested-item">
+            <strong>Nested Item 1</strong> - class="nested-item"
+          </div>
+          <div class="nested-item">
+            <strong>Nested Item 2</strong> - class="nested-item"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>getElementById - By ID</h2>
+    <div class="container">
+      <p>Select a single element by its unique ID:</p>
+
+      <div class="code-block">
+        const element = document.getElementById('element1'); // Returns the
+        element with id="element1" // Returns null if not found
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo1GetId1()">Get element1</button>
+        <button onclick="demo1GetId2()">Get element2</button>
+        <button onclick="demo1NotFound()">Try non-existent ID</button>
+      </div>
+
+      <div id="demo1Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>getElementsByClassName - By Class Name</h2>
+    <div class="container">
+      <p>
+        Select all elements with a specific class (returns HTMLCollection -
+        live):
+      </p>
+
+      <div class="code-block">
+        const elements = document.getElementsByClassName('sample-element'); //
+        Returns HTMLCollection of all elements with class="sample-element" //
+        HTMLCollection is "live" - updates if DOM changes
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo2GetClass()">Get by class "sample-element"</button>
+        <button onclick="demo2GetNestedClass()">
+          Get by class "nested-item"
+        </button>
+        <button onclick="demo2CheckLive()">
+          Test HTMLCollection "live" behavior
+        </button>
+      </div>
+
+      <div id="demo2Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>getElementsByTagName - By Tag Name</h2>
+    <div class="container">
+      <p>
+        Select all elements with a specific tag name (returns HTMLCollection -
+        live):
+      </p>
+
+      <div class="code-block">
+        const divs = document.getElementsByTagName('div'); // Returns
+        HTMLCollection of all &lt;div&gt; elements // Also live
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo3GetDivs()">Get all div elements</button>
+        <button onclick="demo3GetStrong()">Get all strong elements</button>
+        <button onclick="demo3CountElements()">Count all elements</button>
+      </div>
+
+      <div id="demo3Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>querySelector - CSS Selector (First Match)</h2>
+    <div class="container">
+      <p>Select first element matching a CSS selector:</p>
+
+      <div class="code-block">
+        const element = document.querySelector('.sample-element'); // Returns
+        first element matching the CSS selector // Returns null if no match //
+        Works with: document.querySelector('#id') // by ID
+        document.querySelector('.class') // by class
+        document.querySelector('div') // by tag
+        document.querySelector('[data-x]') // by attribute
+        document.querySelector('div.class') // combined
+        document.querySelector('div > p') // child selector
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo4ById()">Select by ID (#element2)</button>
+        <button onclick="demo4ByClass()">
+          Select by class (.sample-element)
+        </button>
+        <button onclick="demo4ByTag()">Select by tag (div)</button>
+        <button onclick="demo4ByAttribute()">
+          Select by attribute ([data-category])
+        </button>
+        <button onclick="demo4Combined()">
+          Combined selector (div.sample-element)
+        </button>
+        <button onclick="demo4Pseudo()">
+          Pseudo-selector (:first-of-type)
+        </button>
+      </div>
+
+      <div id="demo4Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>querySelectorAll - CSS Selector (All Matches)</h2>
+    <div class="container">
+      <p>
+        Select all elements matching a CSS selector (returns NodeList - static):
+      </p>
+
+      <div class="code-block">
+        const elements = document.querySelectorAll('.sample-element'); //
+        Returns NodeList of all matching elements // NodeList is "static" -
+        doesn't update with DOM changes
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo5AllByClass()">Get all by class</button>
+        <button onclick="demo5AllByTag()">Get all divs</button>
+        <button onclick="demo5AllByAttribute()">
+          Get all with data attributes
+        </button>
+        <button onclick="demo5Iterate()">Iterate through results</button>
+      </div>
+
+      <div id="demo5Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>!!! DUPLICATE IDs - A Common Problem</h2>
+    <div class="duplicate-warning">
+      <strong>⚠️ WARNING:</strong> IDs must be unique in HTML! But it's a common
+      mistake...
+      <p>Here are examples of duplicate IDs on this page:</p>
+    </div>
+
+    <div class="container">
+      <p><strong>These elements have duplicate IDs (BAD PRACTICE):</strong></p>
+
+      <div class="example-elements">
+        <div id="duplicate-id" class="sample-element">
+          <strong>Duplicate Element 1</strong> - id="duplicate-id"
+        </div>
+
+        <div id="duplicate-id" class="sample-element">
+          <strong>Duplicate Element 2</strong> - id="duplicate-id"
+        </div>
+
+        <div id="duplicate-id" class="sample-element">
+          <strong>Duplicate Element 3</strong> - id="duplicate-id"
+        </div>
+      </div>
+
+      <div class="warning-box">
+        <strong>What happens with duplicate IDs?</strong>
+        <ul>
+          <li>
+            <code>getElementById()</code> returns only the FIRST matching
+            element
+          </li>
+          <li><code>querySelector()</code> also returns only the FIRST</li>
+          <li>
+            <code>querySelectorAll()</code> cannot easily target duplicates by
+            ID alone
+          </li>
+          <li>CSS styling applied to the ID affects ALL duplicates</li>
+        </ul>
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo6GetDuplicate()">
+          Get duplicate-id (returns first only)
+        </button>
+        <button onclick="demo6HighlightDuplicates()">
+          Highlight all duplicates with querySelectorAll
+        </button>
+        <button onclick="demo6ResetHighlight()">Reset highlight</button>
+      </div>
+
+      <div id="demo6Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>Complex Selectors - Combining Techniques</h2>
+    <div class="container">
+      <p>CSS selectors allow complex queries:</p>
+
+      <ul class="selector-list">
+        <li><code>element > child</code> - Direct children only</li>
+        <li><code>element descendant</code> - All descendants</li>
+        <li><code>element + adjacent</code> - Next sibling</li>
+        <li><code>element ~ general</code> - Any following sibling</li>
+        <li><code>element:nth-child(n)</code> - Specific child position</li>
+        <li><code>element:first-of-type</code> - First of that type</li>
+        <li><code>element.class1.class2</code> - Multiple classes</li>
+        <li><code>element[attr="value"]</code> - Attribute value</li>
+        <li><code>element[attr^="prefix"]</code> - Attribute starts with</li>
+        <li><code>element[attr$="suffix"]</code> - Attribute ends with</li>
+        <li><code>element[attr*="contains"]</code> - Attribute contains</li>
+        <li><code>:not(.class)</code> - Negation</li>
+      </ul>
+
+      <div class="button-group">
+        <button onclick="demo7ChildSelector()">Direct children only</button>
+        <button onclick="demo7DescendantSelector()">All descendants</button>
+        <button onclick="demo7NthChild()">nth-child selector</button>
+        <button onclick="demo7NotSelector()">:not() selector</button>
+      </div>
+
+      <div id="demo7Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>Method Comparison</h2>
+    <div class="container">
+      <table class="comparison-table">
+        <tr>
+          <th>Method</th>
+          <th>Returns</th>
+          <th>Live?</th>
+          <th>CSS Selectors?</th>
+          <th>Best For</th>
+        </tr>
+        <tr>
+          <td><strong>getElementById</strong></td>
+          <td>1 Element or null</td>
+          <td>N/A</td>
+          <td>✗ No</td>
+          <td>Single unique ID</td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td><strong>getElementsByClassName</strong></td>
+          <td>HTMLCollection</td>
+          <td>✓ Yes</td>
+          <td>✗ No</td>
+          <td>By class name</td>
+        </tr>
+        <tr>
+          <td><strong>getElementsByTagName</strong></td>
+          <td>HTMLCollection</td>
+          <td>✓ Yes</td>
+          <td>✗ No</td>
+          <td>By tag name</td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td><strong>querySelector</strong></td>
+          <td>1 Element or null</td>
+          <td>N/A</td>
+          <td>✓ Yes</td>
+          <td>First match with CSS</td>
+        </tr>
+        <tr>
+          <td><strong>querySelectorAll</strong></td>
+          <td>NodeList</td>
+          <td>✗ No</td>
+          <td>✓ Yes</td>
+          <td>All matches with CSS</td>
+        </tr>
+      </table>
+    </div>
+
+    <h2>When to Use What</h2>
+    <div class="container">
+      <div class="info-box">
+        <h3>Use getElementById when:</h3>
+        <ul>
+          <li>You need a single unique element</li>
+          <li>You know the ID exists</li>
+          <li>Simple, fast lookups</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>Use querySelector/querySelectorAll when:</h3>
+        <ul>
+          <li>You need complex selectors</li>
+          <li>You want to combine multiple criteria</li>
+          <li>You prefer CSS-like queries (most modern approach)</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>Avoid getElementsBy* methods:</h3>
+        <ul>
+          <li>They return live collections (can be unpredictable)</li>
+          <li>Limited selector capability</li>
+          <li>querySelector alternatives are more flexible</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      // Demo 1 - getElementById
+      function demo1GetId1() {
+        const elem = document.getElementById("element1");
+        const output = document.getElementById("demo1Output");
+        output.style.display = "block";
+        output.textContent = `✓ Found: ${elem.id}
+Content: ${elem.textContent.trim()}
+HTML: ${elem.outerHTML}`;
+      }
+
+      function demo1GetId2() {
+        const elem = document.getElementById("element2");
+        const output = document.getElementById("demo1Output");
+        output.style.display = "block";
+        output.textContent = `✓ Found: ${elem.id}
+Content: ${elem.textContent.trim()}`;
+      }
+
+      function demo1NotFound() {
+        const elem = document.getElementById("nonexistent");
+        const output = document.getElementById("demo1Output");
+        output.style.display = "block";
+        output.textContent = `Result: ${elem}
+When element is not found, getElementById returns: null`;
+      }
+
+      // Demo 2 - getElementsByClassName
+      function demo2GetClass() {
+        const elements = document.getElementsByClassName("sample-element");
+        const output = document.getElementById("demo2Output");
+        output.style.display = "block";
+        output.textContent = `Found ${elements.length} elements with class="sample-element"\n\nElements:\n${Array.from(
+          elements,
+        )
+          .map(
+            (el, i) =>
+              `${i + 1}. ${el.id || "(no id)"} - ${el.textContent.trim()}`,
+          )
+          .join("\n")}`;
+      }
+
+      function demo2GetNestedClass() {
+        const elements = document.getElementsByClassName("nested-item");
+        const output = document.getElementById("demo2Output");
+        output.style.display = "block";
+        output.textContent = `Found ${elements.length} elements with class="nested-item"\n\nElements:\n${Array.from(
+          elements,
+        )
+          .map((el, i) => `${i + 1}. ${el.textContent.trim()}`)
+          .join("\n")}`;
+      }
+
+      function demo2CheckLive() {
+        const output = document.getElementById("demo2Output");
+        output.style.display = "block";
+
+        const countBefore =
+          document.getElementsByClassName("sample-element").length;
+        output.textContent = `BEFORE: ${countBefore} elements with class="sample-element"\n\nAdding a new element with the class...\n`;
+
+        const newEl = document.createElement("div");
+        newEl.className = "sample-element";
+        newEl.textContent = "Dynamically added element";
+        document.querySelector(".example-elements").appendChild(newEl);
+
+        const countAfter =
+          document.getElementsByClassName("sample-element").length;
+        output.textContent += `AFTER: ${countAfter} elements with class="sample-element"\n\nNote: The collection automatically updated! This is a "live" collection.\n\nRemoving the element...`;
+
+        setTimeout(() => {
+          newEl.remove();
+          const countReset =
+            document.getElementsByClassName("sample-element").length;
+          output.textContent += `\n\nAfter removal: ${countReset} elements\n\nHTMLCollection is LIVE - it reflects DOM changes!`;
+        }, 2000);
+      }
+
+      // Demo 3 - getElementsByTagName
+      function demo3GetDivs() {
+        const divs = document.getElementsByTagName("div");
+        const output = document.getElementById("demo3Output");
+        output.style.display = "block";
+        output.textContent = `Total <div> elements on page: ${divs.length}\n\nFirst 10 divs:\n${Array.from(
+          divs,
+        )
+          .slice(0, 10)
+          .map(
+            (el, i) =>
+              `${i + 1}. ${el.className || "(no class)"} - ${el.textContent.slice(0, 40)}`,
+          )
+          .join("\n")}`;
+      }
+
+      function demo3GetStrong() {
+        const strongs = document.getElementsByTagName("strong");
+        const output = document.getElementById("demo3Output");
+        output.style.display = "block";
+        output.textContent = `Total <strong> elements: ${strongs.length}\n\n<strong> elements:\n${Array.from(
+          strongs,
+        )
+          .slice(0, 5)
+          .map((el, i) => `${i + 1}. ${el.textContent.slice(0, 50)}`)
+          .join("\n")}`;
+      }
+
+      function demo3CountElements() {
+        const output = document.getElementById("demo3Output");
+        output.style.display = "block";
+        output.textContent = `Total elements by tag:\n\n<div>: ${document.getElementsByTagName("div").length}
+<button>: ${document.getElementsByTagName("button").length}
+<p>: ${document.getElementsByTagName("p").length}
+<strong>: ${document.getElementsByTagName("strong").length}
+<h2>: ${document.getElementsByTagName("h2").length}
+<li>: ${document.getElementsByTagName("li").length}`;
+      }
+
+      // Demo 4 - querySelector
+      function demo4ById() {
+        const elem = document.querySelector("#element2");
+        const output = document.getElementById("demo4Output");
+        output.style.display = "block";
+        output.textContent = `Selector: #element2\nFound: ${elem ? elem.id : "null"}\n${elem ? `Content: ${elem.textContent.trim()}` : ""}`;
+      }
+
+      function demo4ByClass() {
+        const elem = document.querySelector(".sample-element");
+        const output = document.getElementById("demo4Output");
+        output.style.display = "block";
+        output.textContent = `Selector: .sample-element\nFound: First matching element\nID: ${elem.id}\nContent: ${elem.textContent.trim()}\n\nNote: querySelector returns only the FIRST match`;
+      }
+
+      function demo4ByTag() {
+        const elem = document.querySelector("div");
+        const output = document.getElementById("demo4Output");
+        output.style.display = "block";
+        output.textContent = `Selector: div\nFound: First <div> element on page\nClass: ${elem.className || "(no class)"}\nContent: ${elem.textContent.slice(0, 50)}...`;
+      }
+
+      function demo4ByAttribute() {
+        const elem = document.querySelector("[data-category]");
+        const output = document.getElementById("demo4Output");
+        output.style.display = "block";
+        output.textContent = `Selector: [data-category]\nFound: ${elem.id}\nAttribute value: ${elem.getAttribute("data-category")}\nContent: ${elem.textContent.trim()}`;
+      }
+
+      function demo4Combined() {
+        const elem = document.querySelector("div.sample-element");
+        const output = document.getElementById("demo4Output");
+        output.style.display = "block";
+        output.textContent = `Selector: div.sample-element\nFound: First <div> with class="sample-element"\nID: ${elem.id}\nContent: ${elem.textContent.trim()}`;
+      }
+
+      function demo4Pseudo() {
+        const elem = document.querySelector("div.sample-element:first-of-type");
+        const output = document.getElementById("demo4Output");
+        output.style.display = "block";
+        output.textContent = `Selector: div.sample-element:first-of-type\nFound: ${elem.id}\nContent: ${elem.textContent.trim()}`;
+      }
+
+      // Demo 5 - querySelectorAll
+      function demo5AllByClass() {
+        const elements = document.querySelectorAll(".sample-element");
+        const output = document.getElementById("demo5Output");
+        output.style.display = "block";
+        output.textContent = `Selector: .sample-element\nFound: ${elements.length} elements\n\n${Array.from(
+          elements,
+        )
+          .map(
+            (el, i) =>
+              `${i + 1}. ${el.id || "(no id)"} - ${el.textContent.slice(0, 40).trim()}`,
+          )
+          .join("\n")}`;
+      }
+
+      function demo5AllByTag() {
+        const divs = document.querySelectorAll("div");
+        const output = document.getElementById("demo5Output");
+        output.style.display = "block";
+        output.textContent = `Selector: div\nFound: ${divs.length} <div> elements\n\nFirst 10:\n${Array.from(
+          divs,
+        )
+          .slice(0, 10)
+          .map((el, i) => `${i + 1}. ${el.className || "(no class)"}`)
+          .join("\n")}`;
+      }
+
+      function demo5AllByAttribute() {
+        const elements = document.querySelectorAll("[data-category]");
+        const output = document.getElementById("demo5Output");
+        output.style.display = "block";
+        output.textContent = `Selector: [data-category]\nFound: ${elements.length} elements\n\n${Array.from(
+          elements,
+        )
+          .map(
+            (el, i) =>
+              `${i + 1}. ${el.id} - data-category="${el.getAttribute("data-category")}"`,
+          )
+          .join("\n")}`;
+      }
+
+      function demo5Iterate() {
+        const elements = document.querySelectorAll("div.sample-element");
+        const output = document.getElementById("demo5Output");
+        output.style.display = "block";
+
+        let result = "Iterating through querySelectorAll results:\n\n";
+        elements.forEach((el, index) => {
+          result += `${index + 1}. ID: ${el.id}\n   Text: ${el.textContent.trim()}\n`;
+        });
+
+        output.textContent = result;
+      }
+
+      // Demo 6 - Duplicate IDs
+      function demo6GetDuplicate() {
+        const elem = document.getElementById("duplicate-id");
+        const output = document.getElementById("demo6Output");
+        output.style.display = "block";
+        output.textContent = `getElementById('duplicate-id') returns:\n\nFirst element only: "${elem.textContent.trim()}"\n\n⚠️ WARNING: This page has 3 elements with id="duplicate-id"!\ngetElementById returns only the FIRST one.`;
+      }
+
+      function demo6HighlightDuplicates() {
+        const elements = document.querySelectorAll("#duplicate-id");
+        const output = document.getElementById("demo6Output");
+        output.style.display = "block";
+        output.textContent = `Found all elements with id="duplicate-id":\n\nTotal: ${elements.length}\n\nUsing querySelectorAll with ID selector:\n${Array.from(
+          elements,
+        )
+          .map((el, i) => `${i + 1}. ${el.textContent.trim()}`)
+          .join("\n")}\n\nAll ${elements.length} duplicates are highlighted!`;
+
+        elements.forEach((el) => {
+          el.classList.add("highlight");
+        });
+      }
+
+      function demo6ResetHighlight() {
+        const elements = document.querySelectorAll("#duplicate-id");
+        elements.forEach((el) => {
+          el.classList.remove("highlight");
+        });
+        const output = document.getElementById("demo6Output");
+        output.style.display = "block";
+        output.textContent = "Highlight reset";
+      }
+
+      // Demo 7 - Complex selectors
+      function demo7ChildSelector() {
+        const children = document.querySelectorAll(
+          "div.example-elements > div",
+        );
+        const output = document.getElementById("demo7Output");
+        output.style.display = "block";
+        output.textContent = `Selector: div.example-elements > div\n\nDirect children only (not nested deeper):\nFound: ${children.length}\n\n${Array.from(
+          children,
+        )
+          .map(
+            (el, i) =>
+              `${i + 1}. ${el.className || "(no class)"} - ${el.textContent.slice(0, 40)}`,
+          )
+          .join("\n")}`;
+      }
+
+      function demo7DescendantSelector() {
+        const descendants = document.querySelectorAll(
+          "div.example-elements div",
+        );
+        const output = document.getElementById("demo7Output");
+        output.style.display = "block";
+        output.textContent = `Selector: div.example-elements div\n\nAll descendants (including nested):\nFound: ${descendants.length}\n\nThis includes children AND grandchildren!`;
+      }
+
+      function demo7NthChild() {
+        const elements = document.querySelectorAll(
+          "div.sample-element:nth-child(1)",
+        );
+        const output = document.getElementById("demo7Output");
+        output.style.display = "block";
+        output.textContent = `Selector: div.sample-element:nth-child(1)\n\nFirst child that matches:\n${Array.from(
+          elements,
+        )
+          .map((el) => `${el.id} - ${el.textContent.trim()}`)
+          .join("\n")}`;
+      }
+
+      function demo7NotSelector() {
+        const notNested = document.querySelectorAll(
+          ".example-elements > div:not(.nested-item)",
+        );
+        const output = document.getElementById("demo7Output");
+        output.style.display = "block";
+        output.textContent = `Selector: .example-elements > div:not(.nested-item)\n\nDirect children that DON'T have class="nested-item":\nFound: ${notNested.length}\n\n${Array.from(
+          notNested,
+        )
+          .map((el, i) => `${i + 1}. ${el.id || "(container)"}`)
+          .join("\n")}`;
+      }
+    </script>
+  </body>
+</html>

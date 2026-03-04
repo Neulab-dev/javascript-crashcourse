@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Styles - style, className, classList</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #2c3e50;
+        border-bottom: 3px solid #e67e22;
+        padding-bottom: 0.5rem;
+      }
+
+      h2 {
+        color: #34495e;
+        margin-top: 1.5rem;
+        border-left: 4px solid #e67e22;
+        padding-left: 0.5rem;
+      }
+
+      .container {
+        background-color: white;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .demo-element {
+        background-color: #fff3e0;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border: 2px solid #e67e22;
+        border-radius: 4px;
+        text-align: center;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      button {
+        background-color: #e67e22;
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      button:hover {
+        background-color: #d35400;
+      }
+
+      .code-block {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        padding: 1rem;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+
+      .output-box {
+        background-color: #ecf0f1;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+        font-family: "Courier New", monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .info-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+      }
+
+      /* CSS Classes for demo */
+      .highlight {
+        background-color: #fff9e6;
+        border-color: #f39c12;
+      }
+
+      .primary {
+        background-color: #d1ecf1;
+        border-color: #17a2b8;
+      }
+
+      .success {
+        background-color: #d4edda;
+        border-color: #28a745;
+      }
+
+      .danger {
+        background-color: #f8d7da;
+        border-color: #dc3545;
+      }
+
+      .large {
+        font-size: 1.5rem;
+        padding: 2rem;
+      }
+
+      .small {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+      }
+
+      .bold {
+        font-weight: bold;
+      }
+
+      .italic {
+        font-style: italic;
+      }
+
+      .rounded {
+        border-radius: 20px;
+      }
+
+      .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .rotate {
+        transform: rotate(5deg);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+
+      th,
+      td {
+        border: 1px solid #bdc3c7;
+        padding: 0.75rem;
+        text-align: left;
+      }
+
+      th {
+        background-color: #34495e;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #ecf0f1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎨 DOM Styles - style, className, classList</h1>
+
+    <div class="info-box">
+      <strong>Three ways to modify element styling:</strong>
+      <ul>
+        <li>
+          <strong>element.style:</strong> Direct inline style manipulation
+          (lowest priority in CSS cascade)
+        </li>
+        <li>
+          <strong>element.className:</strong> Get/set all classes as a string
+        </li>
+        <li>
+          <strong>element.classList:</strong> Modern API to add/remove/toggle
+          individual classes
+        </li>
+      </ul>
+    </div>
+
+    <h2>1. Inline Styles with element.style</h2>
+    <div class="container">
+      <p>Directly modify CSS properties through the style object:</p>
+
+      <div class="code-block">
+        const elem = document.getElementById('myElement');
+        elem.style.backgroundColor = 'blue'; elem.style.color = 'white';
+        elem.style.padding = '1rem'; elem.style.fontSize = '20px';
+      </div>
+
+      <h3>Demo:</h3>
+      <div id="demo1" class="demo-element">Original styling</div>
+
+      <div class="button-group">
+        <button onclick="demo1ChangeColor()">Change Color</button>
+        <button onclick="demo1ChangeBgColor()">Change Background</button>
+        <button onclick="demo1ChangePadding()">Change Padding</button>
+        <button onclick="demo1MultipleStyles()">Apply Multiple</button>
+        <button onclick="demo1ReadStyles()">Read Styles</button>
+        <button onclick="demo1Reset()">Reset</button>
+      </div>
+
+      <div id="demo1Output" class="output-box" style="display: none"></div>
+
+      <div class="info-box">
+        <strong>Note:</strong> CSS property names are camelCase in JS (font-size
+        → fontSize, background-color → backgroundColor)
+      </div>
+    </div>
+
+    <h2>2. Reading Inline Styles</h2>
+    <div class="container">
+      <p>Read current inline style values:</p>
+
+      <div class="code-block">
+        const elem = document.getElementById('myElement'); const bgColor =
+        elem.style.backgroundColor; const color = elem.style.color; const
+        padding = elem.style.padding;
+      </div>
+
+      <h3>Demo:</h3>
+      <div
+        id="demo2"
+        class="demo-element"
+        style="background-color: #d4f1f4; color: #0c5460; padding: 2rem"
+      >
+        Element with inline styles
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo2ReadAll()">Read All Inline Styles</button>
+        <button onclick="demo2ReadSpecific()">Read Specific Properties</button>
+      </div>
+
+      <div id="demo2Output" class="output-box" style="display: none"></div>
+
+      <div class="info-box">
+        <strong>Important:</strong> element.style only reads INLINE styles.
+        Computed styles (from CSS classes) need getComputedStyle()
+      </div>
+    </div>
+
+    <h2>3. className - Get/Set All Classes</h2>
+    <div class="container">
+      <p>Replace all classes at once using className:</p>
+
+      <div class="code-block">
+        const elem = document.getElementById('myElement'); // Get all classes as
+        a string const classes = elem.className; // "class1 class2" // Set
+        classes (replaces all) elem.className = 'newClass1 newClass2';
+      </div>
+
+      <h3>Demo:</h3>
+      <div id="demo3" class="demo-element highlight">Original classes</div>
+
+      <div class="button-group">
+        <button onclick="demo3ReadClasses()">Read className</button>
+        <button onclick="demo3SetSuccess()">Set to success class</button>
+        <button onclick="demo3SetDanger()">Set to danger class</button>
+        <button onclick="demo3SetMultiple()">Set multiple classes</button>
+        <button onclick="demo3Reset()">Reset</button>
+      </div>
+
+      <div id="demo3Output" class="output-box" style="display: none"></div>
+
+      <div class="info-box">
+        <strong>Caution:</strong> className replaces ALL classes. Adding a class
+        with className removes existing classes!
+      </div>
+    </div>
+
+    <h2>4. classList - Modern Class Management</h2>
+    <div class="container">
+      <p>The classList API allows safe manipulation of individual classes:</p>
+
+      <div class="code-block">
+        const elem = document.getElementById('myElement');
+        elem.classList.add('myClass'); // Add a class
+        elem.classList.remove('myClass'); // Remove a class
+        elem.classList.toggle('myClass'); // Add if not present, remove if
+        present elem.classList.contains('myClass'); // Check if has class
+        (returns boolean) elem.classList.replace('old', 'new'); // Replace a
+        class
+      </div>
+
+      <h3>Demo:</h3>
+      <div id="demo4" class="demo-element highlight bold">
+        Element with multiple classes
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo4ReadClasses()">Read classList</button>
+        <button onclick="demo4Add()">Add "italic" class</button>
+        <button onclick="demo4Remove()">Remove "bold" class</button>
+        <button onclick="demo4Toggle()">Toggle "success" class</button>
+        <button onclick="demo4Contains()">Check if has "highlight"</button>
+        <button onclick="demo4Replace()">
+          Replace "highlight" with "danger"
+        </button>
+        <button onclick="demo4Reset()">Reset</button>
+      </div>
+
+      <div id="demo4Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>5. classList.add / classList.remove</h2>
+    <div class="container">
+      <p>Add or remove multiple classes at once:</p>
+
+      <div class="code-block">
+        elem.classList.add('class1', 'class2', 'class3');
+        elem.classList.remove('class1', 'class2');
+      </div>
+
+      <h3>Demo:</h3>
+      <div id="demo5" class="demo-element">Click buttons to modify classes</div>
+
+      <div class="button-group">
+        <button onclick="demo5AddMultiple()">Add multiple classes</button>
+        <button onclick="demo5RemoveMultiple()">Remove multiple classes</button>
+        <button onclick="demo5ShowClasses()">Show current classes</button>
+        <button onclick="demo5Reset()">Reset</button>
+      </div>
+
+      <div id="demo5Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>6. classList.toggle</h2>
+    <div class="container">
+      <p>Toggle a class on/off. Perfect for switch-like behavior:</p>
+
+      <div class="code-block">
+        elem.classList.toggle('active'); // Adds if not present, removes if
+        present elem.classList.toggle('active', true); // Force add
+        elem.classList.toggle('active', false); // Force remove
+      </div>
+
+      <h3>Demo:</h3>
+      <div id="demo6" class="demo-element">Toggle Demo</div>
+
+      <div class="button-group">
+        <button onclick="demo6Toggle()">Toggle Highlight</button>
+        <button onclick="demo6ToggleLarge()">Toggle Large</button>
+        <button onclick="demo6ToggleMultiple()">Toggle Multiple</button>
+        <button onclick="demo6ShowClasses()">Show classes</button>
+        <button onclick="demo6Reset()">Reset</button>
+      </div>
+
+      <div id="demo6Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>7. Reading Computed Styles</h2>
+    <div class="container">
+      <p>
+        Get actual computed styles (including from CSS classes) using
+        getComputedStyle():
+      </p>
+
+      <div class="code-block">
+        const elem = document.getElementById('myElement'); const computed =
+        window.getComputedStyle(elem); const bgColor = computed.backgroundColor;
+        const fontSize = computed.fontSize; const padding = computed.padding;
+      </div>
+
+      <h3>Demo:</h3>
+      <div id="demo7" class="demo-element primary large shadow">
+        Element with CSS class styles
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo7ReadComputed()">Read Computed Styles</button>
+        <button onclick="demo7Compare()">Compare inline vs computed</button>
+      </div>
+
+      <div id="demo7Output" class="output-box" style="display: none"></div>
+
+      <div class="info-box">
+        <strong>Difference:</strong>
+        <ul>
+          <li><code>element.style</code> - Only inline styles</li>
+          <li>
+            <code>getComputedStyle()</code> - Final computed values (inline +
+            CSS classes + cascading)
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>8. Combining Approaches - Real World Example</h2>
+    <div class="container">
+      <p>A practical example combining multiple techniques:</p>
+
+      <h3>Interactive Button Demo:</h3>
+      <div id="demo8" class="demo-element">Click me!</div>
+
+      <div class="button-group">
+        <button onclick="demo8ApplyStyles()">Apply Theme</button>
+        <button onclick="demo8ToggleDarkMode()">Toggle Dark Mode</button>
+        <button onclick="demo8ShowAllInfo()">Show All Info</button>
+        <button onclick="demo8Reset()">Reset</button>
+      </div>
+
+      <div id="demo8Output" class="output-box" style="display: none"></div>
+
+      <div class="code-block">
+        elem.style.transition = 'all 0.3s ease'; // Inline for one-off styles
+        elem.classList.add('primary'); // Use classes for themed colors
+        elem.classList.toggle('active'); // Use toggle for states
+      </div>
+    </div>
+
+    <h2>Method Comparison</h2>
+    <div class="container">
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Use Case</th>
+          <th>Pros</th>
+          <th>Cons</th>
+        </tr>
+        <tr>
+          <td><strong>element.style</strong></td>
+          <td>One-off inline styles</td>
+          <td>Direct, immediate</td>
+          <td>Lowest priority, hard to maintain</td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td><strong>element.className</strong></td>
+          <td>Replace all classes</td>
+          <td>Simple, complete replacement</td>
+          <td>Removes existing classes, string manipulation</td>
+        </tr>
+        <tr>
+          <td><strong>element.classList</strong></td>
+          <td>Add/remove individual classes</td>
+          <td>Modern, safe, intuitive API</td>
+          <td>Requires browser support (modern browsers)</td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td><strong>getComputedStyle()</strong></td>
+          <td>Read final computed styles</td>
+          <td>Gets actual rendered values</td>
+          <td>Read-only, performance cost</td>
+        </tr>
+      </table>
+    </div>
+
+    <h2>Best Practices</h2>
+    <div class="container">
+      <div class="info-box">
+        <h3>✓ DO:</h3>
+        <ul>
+          <li>
+            Use <strong>classList</strong> for adding/removing individual
+            classes (modern approach)
+          </li>
+          <li>
+            Use <strong>CSS classes</strong> for styling themes and states
+          </li>
+          <li>
+            Use <strong>element.style</strong> only for dynamic/calculated
+            values
+          </li>
+          <li>
+            Use <strong>getComputedStyle()</strong> when you need final computed
+            values
+          </li>
+          <li>Keep styles in CSS, use JavaScript for toggling classes</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>DON'T:</h3>
+        <ul>
+          <li>
+            Use <strong>className</strong> to add/remove classes (it replaces
+            all)
+          </li>
+          <li>Put complex styling logic in JavaScript</li>
+          <li>Use inline styles for anything that should be in CSS</li>
+          <li>Repeatedly read computed styles in loops (performance issue)</li>
+          <li>Mix inline styles with classes for the same properties</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      // Demo 1 - Inline styles
+      function demo1ChangeColor() {
+        const elem = document.getElementById("demo1");
+        elem.style.color = "white";
+        elem.style['background-color'] = "#e74c3c";
+      }
+
+      function demo1ChangeBgColor() {
+        const elem = document.getElementById("demo1");
+        elem.style.backgroundColor = "#3498db";
+      }
+
+      function demo1ChangePadding() {
+        const elem = document.getElementById("demo1");
+        elem.style.padding = "2rem";
+      }
+
+      function demo1MultipleStyles() {
+        const elem = document.getElementById("demo1");
+        elem.style.fontSize = "1.5rem";
+        elem.style.fontWeight = "bold";
+        elem.style.color = "#fff";
+        elem.style.backgroundColor = "#27ae60";
+        elem.style.borderRadius = "10px";
+      }
+
+      function demo1ReadStyles() {
+        const elem = document.getElementById("demo1");
+        const output = document.getElementById("demo1Output");
+        output.style.display = "block";
+        output.textContent = `Current inline styles:
+- color: ${elem.style.color}
+- backgroundColor: ${elem.style.backgroundColor}
+- padding: ${elem.style.padding}
+- fontSize: ${elem.style.fontSize}
+- fontWeight: ${elem.style.fontWeight}
+- borderRadius: ${elem.style.borderRadius}`;
+      }
+
+      function demo1Reset() {
+        const elem = document.getElementById("demo1");
+        elem.style.color = "";
+        elem.style.backgroundColor = "";
+        elem.style.padding = "";
+        elem.style.fontSize = "";
+        elem.style.fontWeight = "";
+        elem.style.borderRadius = "";
+      }
+
+      // Demo 2 - Reading styles
+      function demo2ReadAll() {
+        const elem = document.getElementById("demo2");
+        const output = document.getElementById("demo2Output");
+        output.style.display = "block";
+        output.textContent = `All inline styles on this element:
+${elem.getAttribute("style")}`;
+      }
+
+      function demo2ReadSpecific() {
+        const elem = document.getElementById("demo2");
+        const output = document.getElementById("demo2Output");
+        output.style.display = "block";
+        output.textContent = `Reading specific style properties:
+- backgroundColor: ${elem.style.backgroundColor}
+- color: ${elem.style.color}
+- padding: ${elem.style.padding}
+- borderRadius: ${elem.style.borderRadius}`;
+      }
+
+      // Demo 3 - className
+      function demo3ReadClasses() {
+        const elem = document.getElementById("demo3");
+        const output = document.getElementById("demo3Output");
+        output.style.display = "block";
+        output.textContent = `Current className: "${elem.className}"
+(as a single string)`;
+      }
+
+      function demo3SetSuccess() {
+        const elem = document.getElementById("demo3");
+        elem.className = "demo-element success";
+      }
+
+      function demo3SetDanger() {
+        const elem = document.getElementById("demo3");
+        elem.className = "demo-element danger";
+      }
+
+      function demo3SetMultiple() {
+        const elem = document.getElementById("demo3");
+        elem.className = "demo-element highlight bold italic shadow";
+      }
+
+      function demo3Reset() {
+        const elem = document.getElementById("demo3");
+        elem.className = "demo-element highlight";
+      }
+
+      // Demo 4 - classList
+      function demo4ReadClasses() {
+        const elem = document.getElementById("demo4");
+        const output = document.getElementById("demo4Output");
+        output.style.display = "block";
+        let result = `classList.length: ${elem.classList.length}\n\nClasses:\n`;
+        for (let i = 0; i < elem.classList.length; i++) {
+          result += `${i + 1}. ${elem.classList[i]}\n`;
+        }
+        output.textContent = result;
+      }
+
+      function demo4Add() {
+        const elem = document.getElementById("demo4");
+        elem.classList.add("italic");
+      }
+
+      function demo4Remove() {
+        const elem = document.getElementById("demo4");
+        elem.classList.remove("bold");
+      }
+
+      function demo4Toggle() {
+        const elem = document.getElementById("demo4");
+        elem.classList.toggle("success");
+      }
+
+      function demo4Contains() {
+        const elem = document.getElementById("demo4");
+        const output = document.getElementById("demo4Output");
+        output.style.display = "block";
+        output.textContent = `elem.classList.contains('highlight'): ${elem.classList.contains("highlight")}
+elem.classList.contains('bold'): ${elem.classList.contains("bold")}
+elem.classList.contains('success'): ${elem.classList.contains("success")}`;
+      }
+
+      function demo4Replace() {
+        const elem = document.getElementById("demo4");
+        if (elem.classList.contains("highlight")) {
+          elem.classList.replace("highlight", "danger");
+        }
+      }
+
+      function demo4Reset() {
+        const elem = document.getElementById("demo4");
+        elem.className = "demo-element highlight bold";
+      }
+
+      // Demo 5 - Add/Remove multiple
+      function demo5AddMultiple() {
+        const elem = document.getElementById("demo5");
+        elem.classList.add("primary", "large", "shadow");
+      }
+
+      function demo5RemoveMultiple() {
+        const elem = document.getElementById("demo5");
+        elem.classList.remove("primary", "large", "shadow");
+      }
+
+      function demo5ShowClasses() {
+        const elem = document.getElementById("demo5");
+        const output = document.getElementById("demo5Output");
+        output.style.display = "block";
+        output.textContent = `Current classes: ${elem.className}`;
+      }
+
+      function demo5Reset() {
+        const elem = document.getElementById("demo5");
+        elem.className = "demo-element";
+      }
+
+      // Demo 6 - Toggle
+      function demo6Toggle() {
+        const elem = document.getElementById("demo6");
+        elem.classList.toggle("highlight");
+      }
+
+      function demo6ToggleLarge() {
+        const elem = document.getElementById("demo6");
+        elem.classList.toggle("large");
+      }
+
+      function demo6ToggleMultiple() {
+        const elem = document.getElementById("demo6");
+        elem.classList.toggle("success");
+        elem.classList.toggle("bold");
+      }
+
+      function demo6ShowClasses() {
+        const elem = document.getElementById("demo6");
+        const output = document.getElementById("demo6Output");
+        output.style.display = "block";
+        output.textContent = `Current classes: ${elem.className}`;
+      }
+
+      function demo6Reset() {
+        const elem = document.getElementById("demo6");
+        elem.className = "demo-element";
+      }
+
+      // Demo 7 - Computed styles
+      function demo7ReadComputed() {
+        const elem = document.getElementById("demo7");
+        const computed = window.getComputedStyle(elem);
+        const output = document.getElementById("demo7Output");
+        output.style.display = "block";
+        output.textContent = `Computed Styles:
+- backgroundColor: ${computed.backgroundColor}
+- color: ${computed.color}
+- padding: ${computed.padding}
+- fontSize: ${computed.fontSize}
+- fontWeight: ${computed.fontWeight}
+- boxShadow: ${computed.boxShadow}
+- borderRadius: ${computed.borderRadius}
+- transition: ${computed.transition}`;
+      }
+
+      function demo7Compare() {
+        const elem = document.getElementById("demo7");
+        const computed = window.getComputedStyle(elem);
+        const output = document.getElementById("demo7Output");
+        output.style.display = "block";
+        output.textContent = `element.style (inline only):
+- backgroundColor: ${elem.style.backgroundColor}
+- padding: ${elem.style.padding}
+- fontSize: ${elem.style.fontSize}
+
+getComputedStyle() (final rendered):
+- backgroundColor: ${computed.backgroundColor}
+- padding: ${computed.padding}
+- fontSize: ${computed.fontSize}
+
+getComputedStyle() gives the actual rendered values!`;
+      }
+
+      // Demo 8 - Combined
+      function demo8ApplyStyles() {
+        const elem = document.getElementById("demo8");
+        elem.classList.add("success", "large", "bold");
+        elem.style.borderRadius = "10px";
+      }
+
+      function demo8ToggleDarkMode() {
+        const elem = document.getElementById("demo8");
+        if (elem.classList.contains("primary")) {
+          elem.classList.replace("primary", "danger");
+        } else {
+          elem.classList.replace("danger", "primary");
+        }
+        elem.classList.add("primary");
+      }
+
+      function demo8ShowAllInfo() {
+        const elem = document.getElementById("demo8");
+        const computed = window.getComputedStyle(elem);
+        const output = document.getElementById("demo8Output");
+        output.style.display = "block";
+        output.textContent = `Element Information:
+
+Classes: ${elem.className}
+
+Inline Styles:
+- borderRadius: ${elem.style.borderRadius}
+
+Computed Styles:
+- backgroundColor: ${computed.backgroundColor}
+- color: ${computed.color}
+- padding: ${computed.padding}
+- fontSize: ${computed.fontSize}
+- fontWeight: ${computed.fontWeight}`;
+      }
+
+      function demo8Reset() {
+        const elem = document.getElementById("demo8");
+        elem.className = "demo-element";
+        elem.style.borderRadius = "";
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Dimensions, Scroll & Element Coordinates</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #2c3e50;
+        border-bottom: 3px solid #16a085;
+        padding-bottom: 0.5rem;
+        position: sticky;
+        top: -2rem;
+        background-color: #f5f5f5;
+        padding-top: 1rem;
+        z-index: 10;
+      }
+
+      h2 {
+        color: #34495e;
+        margin-top: 1.5rem;
+        border-left: 4px solid #16a085;
+        padding-left: 0.5rem;
+      }
+
+      .container {
+        background-color: white;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      button {
+        background-color: #16a085;
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      button:hover {
+        background-color: #138d75;
+      }
+
+      .code-block {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        padding: 1rem;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+
+      .output-box {
+        background-color: #ecf0f1;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+        font-family: "Courier New", monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+        max-height: 250px;
+        overflow-y: auto;
+      }
+
+      .info-box {
+        background-color: #d4edda;
+        border-left: 4px solid #28a745;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+
+      .demo-element {
+        background-color: #e8f8f5;
+        border: 2px solid #16a085;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        width: 200px;
+        height: 100px;
+      }
+
+      .demo-list {
+        background-color: #f0f0f0;
+        border: 2px dashed #16a085;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+        height: 300px;
+        overflow-y: scroll;
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .demo-list li {
+        background-color: white;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-left: 4px solid #16a085;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .demo-list li:hover {
+        background-color: #fff9e6;
+      }
+
+      .info-display {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        background-color: #16a085;
+        color: white;
+        padding: 1rem;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.8rem;
+        max-width: 300px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 100;
+        display: none;
+      }
+
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+
+      th,
+      td {
+        border: 1px solid #bdc3c7;
+        padding: 0.75rem;
+        text-align: left;
+      }
+
+      th {
+        background-color: #34495e;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #ecf0f1;
+      }
+
+      canvas {
+        border: 2px solid #16a085;
+        background-color: white;
+        display: block;
+        margin: 1rem 0;
+      }
+
+      .highlight {
+        background-color: #fff9e6;
+        border: 2px solid #f39c12;
+      }
+
+      .positioned {
+        position: relative;
+        background-color: #fff3e0;
+        margin: 2rem 0;
+        padding: 1rem;
+        border: 2px dashed #e67e22;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>DOM Dimensions, Scroll & Element Coordinates</h1>
+
+    <div class="info-box">
+      <strong>Learn about:</strong>
+      <ul>
+        <li>
+          <strong>Element dimensions:</strong> offsetWidth, offsetHeight,
+          clientWidth, clientHeight, scrollWidth, scrollHeight
+        </li>
+        <li>
+          <strong>Element position:</strong> offsetLeft, offsetTop,
+          getBoundingClientRect()
+        </li>
+        <li>
+          <strong>Scroll position:</strong> scrollX, scrollY, scrollLeft,
+          scrollTop
+        </li>
+        <li>
+          <strong>Window dimensions:</strong> innerWidth, innerHeight,
+          outerWidth, outerHeight
+        </li>
+      </ul>
+    </div>
+
+    <h2>1. Element Dimensions</h2>
+    <div class="container">
+      <p>Different ways to measure element size:</p>
+
+      <div class="code-block">
+        const elem = document.getElementById('element'); // Including border &
+        padding elem.offsetWidth // Width (border + padding + content)
+        elem.offsetHeight // Height (border + padding + content) // Excluding
+        border & padding elem.clientWidth // Width (padding + content only)
+        elem.clientHeight // Height (padding + content only) // Full size with
+        overflow (scrollable area) elem.scrollWidth // Full width if scrollable
+        elem.scrollHeight // Full height if scrollable
+      </div>
+
+      <h3>Demo Element (200x100px with borders and padding):</h3>
+      <div id="demo1Element" class="demo-element">Demo Element</div>
+
+      <div class="button-group">
+        <button onclick="demo1ShowDimensions()">Show All Dimensions</button>
+        <button onclick="demo1Highlight()">Highlight Element</button>
+      </div>
+
+      <div id="demo1Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>2. Window & Viewport Dimensions</h2>
+    <div class="container">
+      <p>Measure browser window and viewport:</p>
+
+      <div class="code-block">
+        // Window outer size (includes browser UI) window.outerWidth // Full
+        browser window width window.outerHeight // Full browser window height //
+        Viewport (visible area) window.innerWidth // Viewport width
+        window.innerHeight // Viewport height // Screen size (monitor)
+        window.screen.width // Physical screen width window.screen.height //
+        Physical screen height window.screen.availWidth // Available width
+        (excludes taskbar) window.screen.availHeight// Available height
+        (excludes taskbar)
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo2ShowDimensions()">Show Window Dimensions</button>
+        <button onclick="demo2ShowScreen()">Show Screen Info</button>
+      </div>
+
+      <div id="demo2Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>3. Scroll Position</h2>
+    <div class="container">
+      <p>Track scroll position of page and scrollable elements:</p>
+
+      <div class="code-block">
+        // Page scroll position window.scrollX // or window.pageXOffset -
+        horizontal scroll window.scrollY // or window.pageYOffset - vertical
+        scroll // Element scroll position elem.scrollLeft // Horizontal scroll
+        of element elem.scrollTop // Vertical scroll of element
+      </div>
+
+      <h3>Scrollable List Demo:</h3>
+      <ul id="scrollList" class="demo-list">
+        <li onclick="itemClicked(this)">Item 1</li>
+        <li onclick="itemClicked(this)">Item 2</li>
+        <li onclick="itemClicked(this)">Item 3</li>
+        <li onclick="itemClicked(this)">Item 4</li>
+        <li onclick="itemClicked(this)">Item 5</li>
+        <li onclick="itemClicked(this)">Item 6</li>
+        <li onclick="itemClicked(this)">Item 7</li>
+        <li onclick="itemClicked(this)">Item 8</li>
+        <li onclick="itemClicked(this)">Item 9</li>
+        <li onclick="itemClicked(this)">Item 10</li>
+      </ul>
+
+      <div class="button-group">
+        <button onclick="demo3ShowPageScroll()">Show Page Scroll</button>
+        <button onclick="demo3ShowListScroll()">Show List Scroll</button>
+        <button onclick="demo3ScrollListTo()">Scroll List to Item 7</button>
+        <button onclick="demo3ResetListScroll()">Reset List Scroll</button>
+      </div>
+
+      <div id="demo3Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>4. Element Position - offsetLeft & offsetTop</h2>
+    <div class="container">
+      <p>Get element position relative to its offset parent:</p>
+
+      <div class="code-block">
+        const elem = document.getElementById('element'); elem.offsetLeft //
+        Distance from left edge of offset parent elem.offsetTop // Distance from
+        top edge of offset parent elem.offsetParent // Reference element
+        (usually closest positioned ancestor) elem.parentElement// Direct parent
+        element
+      </div>
+
+      <h3>Positioned Container with Nested Element:</h3>
+      <div class="positioned" id="container">
+        <div
+          id="nestedElement"
+          style="
+            background-color: #d4edda;
+            padding: 1rem;
+            border-left: 4px solid #28a745;
+            width: 150px;
+          "
+        >
+          Nested Element
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo4ShowPosition()">
+          Show offsetLeft & offsetTop
+        </button>
+        <button onclick="demo4ShowOffsetParent()">Show offsetParent</button>
+      </div>
+
+      <div id="demo4Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>5. getBoundingClientRect() - Absolute Position</h2>
+    <div class="container">
+      <p>
+        Get element's position relative to viewport (useful for animations,
+        positioning):
+      </p>
+
+      <div class="code-block">
+        const rect = elem.getBoundingClientRect(); rect.top // Distance from top
+        of viewport rect.bottom // Distance from bottom of viewport rect.left //
+        Distance from left of viewport rect.right // Distance from right of
+        viewport rect.width // Element width rect.height // Element height
+        rect.x // Same as left rect.y // Same as top
+      </div>
+
+      <h3>Demo Element (for viewport coordinates):</h3>
+      <div id="demo5Element" class="demo-element" style="width: 300px">
+        Move this on screen and click button
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo5ShowBoundingRect()">
+          Show getBoundingClientRect()
+        </button>
+        <button onclick="demo5TrackMouse()">
+          Start tracking mouse distance
+        </button>
+        <button onclick="demo5StopTracking()">Stop tracking</button>
+      </div>
+
+      <div id="demo5Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>6. Real-time Position Tracking (as you scroll)</h2>
+    <div class="container">
+      <p>Monitor element position in real-time as the page scrolls:</p>
+
+      <h3>Long Content (scroll to see position change):</h3>
+      <div
+        style="
+          background-color: #f0f0f0;
+          padding: 2rem;
+          border-radius: 4px;
+          margin: 1rem 0;
+        "
+      >
+        <p>
+          This is a long section of content. Scroll down while watching the info
+          box in the bottom-right corner to see the element's position change as
+          you scroll.
+        </p>
+        <div
+          style="
+            height: 800px;
+            background: linear-gradient(to bottom, #e8f8f5, #f0f0f0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+          "
+        >
+          <h3>↓ Keep scrolling down ↓</h3>
+        </div>
+      </div>
+
+      <div
+        id="trackingElement"
+        class="demo-element"
+        style="
+          width: 100%;
+          height: 150px;
+          background: linear-gradient(135deg, #16a085, #1abc9c);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+        "
+      >
+        Track my position!
+      </div>
+
+      <div
+        style="
+          height: 800px;
+          background: linear-gradient(to bottom, #f0f0f0, #e8f8f5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+        "
+      >
+        <h3>↓ Element above ↑</h3>
+      </div>
+
+      <div class="button-group">
+        <button onclick="demo6StartTracking()">Start Real-time Tracking</button>
+        <button onclick="demo6StopTracking()">Stop Tracking</button>
+      </div>
+    </div>
+
+    <h2>7. Canvas - Visual Representation of Coordinates</h2>
+    <div class="container">
+      <p>Visualizing different coordinate systems:</p>
+
+      <canvas id="coordCanvas" width="400" height="300"></canvas>
+
+      <button onclick="demo7DrawDiagram()">Draw Coordinate Systems</button>
+
+      <div id="demo7Output" class="output-box" style="display: none"></div>
+    </div>
+
+    <h2>Property Reference Table</h2>
+    <div class="container">
+      <table>
+        <tr>
+          <th>Property</th>
+          <th>Returns</th>
+          <th>What it Measures</th>
+          <th>Includes Border?</th>
+          <th>Includes Padding?</th>
+        </tr>
+        <tr>
+          <td><strong>offsetWidth</strong></td>
+          <td>Number (px)</td>
+          <td>Element width</td>
+          <td>✓ Yes</td>
+          <td>✓ Yes</td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td><strong>offsetHeight</strong></td>
+          <td>Number (px)</td>
+          <td>Element height</td>
+          <td>✓ Yes</td>
+          <td>✓ Yes</td>
+        </tr>
+        <tr>
+          <td><strong>clientWidth</strong></td>
+          <td>Number (px)</td>
+          <td>Width minus border</td>
+          <td>✗ No</td>
+          <td>✓ Yes</td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td><strong>clientHeight</strong></td>
+          <td>Number (px)</td>
+          <td>Height minus border</td>
+          <td>✗ No</td>
+          <td>✓ Yes</td>
+        </tr>
+        <tr>
+          <td><strong>scrollWidth</strong></td>
+          <td>Number (px)</td>
+          <td>Full width (with overflow)</td>
+          <td>✗ No</td>
+          <td>✓ Yes</td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td><strong>scrollHeight</strong></td>
+          <td>Number (px)</td>
+          <td>Full height (with overflow)</td>
+          <td>✗ No</td>
+          <td>✓ Yes</td>
+        </tr>
+        <tr>
+          <td><strong>offsetLeft</strong></td>
+          <td>Number (px)</td>
+          <td>Distance from offset parent left</td>
+          <td colspan="2">Relative to offset parent</td>
+        </tr>
+        <tr style="background-color: #ecf0f1">
+          <td><strong>offsetTop</strong></td>
+          <td>Number (px)</td>
+          <td>Distance from offset parent top</td>
+          <td colspan="2">Relative to offset parent</td>
+        </tr>
+        <tr>
+          <td><strong>getBoundingClientRect()</strong></td>
+          <td>DOMRect object</td>
+          <td>Viewport-relative position</td>
+          <td colspan="2">Relative to viewport</td>
+        </tr>
+      </table>
+    </div>
+
+    <h2>Common Use Cases</h2>
+    <div class="container">
+      <div class="info-box">
+        <h3>When to use each property:</h3>
+        <ul>
+          <li>
+            <strong>offsetWidth/offsetHeight:</strong> Get visible element size
+            with borders
+          </li>
+          <li>
+            <strong>clientWidth/clientHeight:</strong> Get content size
+            excluding borders
+          </li>
+          <li>
+            <strong>scrollWidth/scrollHeight:</strong> Check if element is
+            scrollable
+          </li>
+          <li>
+            <strong>offsetLeft/offsetTop:</strong> Position relative to
+            positioned parent
+          </li>
+          <li>
+            <strong>getBoundingClientRect():</strong> Position for
+            viewport-relative operations (animations, overlays)
+          </li>
+          <li>
+            <strong>scrollX/scrollY:</strong> Track page scroll for parallax,
+            sticky headers
+          </li>
+          <li>
+            <strong>window.innerWidth/innerHeight:</strong> Responsive design
+            calculations
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="infoDisplay" class="info-display"></div>
+
+    <script>
+      // Demo 1
+      function demo1ShowDimensions() {
+        const elem = document.getElementById("demo1Element");
+        const output = document.getElementById("demo1Output");
+        output.style.display = "block";
+        output.textContent = `Element Dimensions:
+
+With borders & padding:
+- offsetWidth: ${elem.offsetWidth}px
+- offsetHeight: ${elem.offsetHeight}px
+
+Without borders, with padding:
+- clientWidth: ${elem.clientWidth}px
+- clientHeight: ${elem.clientHeight}px
+
+Full size (if scrollable):
+- scrollWidth: ${elem.scrollWidth}px
+- scrollHeight: ${elem.scrollHeight}px
+
+Computed styles:
+- Actual width: ${getComputedStyle(elem).width}
+- Actual height: ${getComputedStyle(elem).height}
+- Padding: ${getComputedStyle(elem).padding}
+- Border: ${getComputedStyle(elem).border}`;
+      }
+
+      function demo1Highlight() {
+        const elem = document.getElementById("demo1Element");
+        elem.classList.toggle("highlight");
+      }
+
+      // Demo 2
+      function demo2ShowDimensions() {
+        const output = document.getElementById("demo2Output");
+        output.style.display = "block";
+        output.textContent = `Window Dimensions:
+
+Browser window (with UI):
+- window.outerWidth: ${window.outerWidth}px
+- window.outerHeight: ${window.outerHeight}px
+
+Viewport (visible area):
+- window.innerWidth: ${window.innerWidth}px
+- window.innerHeight: ${window.innerHeight}px
+
+Difference (browser UI size):
+- Width difference: ${window.outerWidth - window.innerWidth}px
+- Height difference: ${window.outerHeight - window.innerHeight}px`;
+      }
+
+      function demo2ShowScreen() {
+        const output = document.getElementById("demo2Output");
+        output.style.display = "block";
+        output.textContent = `Screen Information:
+
+Physical screen:
+- screen.width: ${window.screen.width}px
+- screen.height: ${window.screen.height}px
+
+Available space (minus taskbar, etc):
+- screen.availWidth: ${window.screen.availWidth}px
+- screen.availHeight: ${window.screen.availHeight}px
+
+Taskbar area:
+- Width: ${window.screen.width - window.screen.availWidth}px
+- Height: ${window.screen.height - window.screen.availHeight}px
+
+Pixel ratio:
+- devicePixelRatio: ${window.devicePixelRatio}`;
+      }
+
+      // Demo 3
+      function itemClicked(elem) {
+        elem.classList.add("highlight");
+        setTimeout(() => elem.classList.remove("highlight"), 500);
+      }
+
+      function demo3ShowPageScroll() {
+        const output = document.getElementById("demo3Output");
+        output.style.display = "block";
+        output.textContent = `Page Scroll Position:
+
+- window.scrollX (or pageXOffset): ${window.scrollX}px
+- window.scrollY (or pageYOffset): ${window.scrollY}px
+
+This is the position of the vertical scrollbar on the page.`;
+      }
+
+      function demo3ShowListScroll() {
+        const list = document.getElementById("scrollList");
+        const output = document.getElementById("demo3Output");
+        output.style.display = "block";
+        output.textContent = `Scrollable List Position:
+
+- scrollLeft: ${list.scrollLeft}px
+- scrollTop: ${list.scrollTop}px
+- scrollHeight: ${list.scrollHeight}px
+- clientHeight: ${list.clientHeight}px
+
+Percent scrolled: ${Math.round((list.scrollTop / (list.scrollHeight - list.clientHeight)) * 100)}%`;
+      }
+
+      function demo3ScrollListTo() {
+        const list = document.getElementById("scrollList");
+        list.scrollTop = 200;
+      }
+
+      function demo3ResetListScroll() {
+        const list = document.getElementById("scrollList");
+        list.scrollTop = 0;
+      }
+
+      // Demo 4
+      function demo4ShowPosition() {
+        const elem = document.getElementById("nestedElement");
+        const container = document.getElementById("container");
+        const output = document.getElementById("demo4Output");
+        output.style.display = "block";
+        output.textContent = `Nested Element Position:
+
+- offsetLeft: ${elem.offsetLeft}px
+- offsetTop: ${elem.offsetTop}px
+
+These are relative to the offset parent (the container with position: relative).
+
+Element is positioned:
+- ${elem.offsetLeft}px from the left of the container
+- ${elem.offsetTop}px from the top of the container`;
+      }
+
+      function demo4ShowOffsetParent() {
+        const elem = document.getElementById("nestedElement");
+        const output = document.getElementById("demo4Output");
+        output.style.display = "block";
+
+        const parent = elem.offsetParent;
+        output.textContent = `Offset Parent Information:
+
+offsetParent: ${parent ? parent.id || parent.tagName : "null"}
+Direct parent: ${elem.parentElement.id || elem.parentElement.tagName}
+
+The offsetParent is the closest positioned ancestor.
+(An ancestor with position: relative, absolute, fixed, or sticky)`;
+      }
+
+      // Demo 5
+      function demo5ShowBoundingRect() {
+        const elem = document.getElementById("demo5Element");
+        const rect = elem.getBoundingClientRect();
+        const output = document.getElementById("demo5Output");
+        output.style.display = "block";
+        output.textContent = `Bounding Client Rect (viewport-relative):
+
+- top: ${rect.top.toFixed(2)}px (distance from viewport top)
+- bottom: ${rect.bottom.toFixed(2)}px
+- left: ${rect.left.toFixed(2)}px (distance from viewport left)
+- right: ${rect.right.toFixed(2)}px
+- width: ${rect.width.toFixed(2)}px
+- height: ${rect.height.toFixed(2)}px
+- x: ${rect.x.toFixed(2)}px (same as left)
+- y: ${rect.y.toFixed(2)}px (same as top)
+
+These coordinates are relative to the visible viewport,
+not the page. They change as you scroll!`;
+      }
+
+      let tracking5 = false;
+      function demo5TrackMouse() {
+        tracking5 = true;
+        document.addEventListener("mousemove", trackMouse5);
+      }
+
+      function trackMouse5(e) {
+        if (!tracking5) return;
+
+        const elem = document.getElementById("demo5Element");
+        const rect = elem.getBoundingClientRect();
+        const output = document.getElementById("demo5Output");
+        output.style.display = "block";
+
+        const distFromTop = e.clientY - rect.top;
+        const distFromLeft = e.clientX - rect.left;
+
+        output.textContent = `Mouse Distance from Element:
+
+Element position:
+- Top: ${rect.top.toFixed(2)}px
+- Left: ${rect.left.toFixed(2)}px
+
+Mouse position:
+- Y: ${e.clientY}px
+- X: ${e.clientX}px
+
+Distance from element:
+- From top: ${distFromTop.toFixed(2)}px
+- From left: ${distFromLeft.toFixed(2)}px
+
+Mouse is ${distFromTop < 0 ? "ABOVE" : distFromTop > rect.height ? "BELOW" : "OVER"} the element`;
+      }
+
+      function demo5StopTracking() {
+        tracking5 = false;
+        document.removeEventListener("mousemove", trackMouse5);
+      }
+
+      // Demo 6
+      let tracking6 = false;
+      function demo6StartTracking() {
+        tracking6 = true;
+        const display = document.getElementById("infoDisplay");
+        display.style.display = "block";
+
+        window.addEventListener("scroll", updateTracking);
+        window.addEventListener("mousemove", updateTracking);
+        updateTracking();
+      }
+
+      function updateTracking() {
+        if (!tracking6) return;
+
+        const elem = document.getElementById("trackingElement");
+        const rect = elem.getBoundingClientRect();
+        const display = document.getElementById("infoDisplay");
+
+        display.innerHTML = `📍 Position Tracking<br>
+<br>
+Viewport Position:<br>
+top: ${rect.top.toFixed(0)}px<br>
+left: ${rect.left.toFixed(0)}px<br>
+<br>
+Page Scroll:<br>
+scrollY: ${window.scrollY.toFixed(0)}px<br>
+<br>
+In viewport: ${rect.top >= -rect.height && rect.top <= window.innerHeight ? "✓ YES" : "✗ NO"}`;
+      }
+
+      function demo6StopTracking() {
+        tracking6 = false;
+        document.removeEventListener("scroll", updateTracking);
+        document.removeEventListener("mousemove", updateTracking);
+        document.getElementById("infoDisplay").style.display = "none";
+      }
+
+      // Demo 7
+      function demo7DrawDiagram() {
+        const canvas = document.getElementById("coordCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Clear canvas
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw grid
+        ctx.strokeStyle = "#ecf0f1";
+        ctx.lineWidth = 1;
+        for (let i = 0; i < canvas.width; i += 50) {
+          ctx.beginPath();
+          ctx.moveTo(i, 0);
+          ctx.lineTo(i, canvas.height);
+          ctx.stroke();
+        }
+        for (let i = 0; i < canvas.height; i += 50) {
+          ctx.beginPath();
+          ctx.moveTo(0, i);
+          ctx.lineTo(canvas.width, i);
+          ctx.stroke();
+        }
+
+        // Draw axes
+        ctx.strokeStyle = "#16a085";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(30, 0);
+        ctx.lineTo(30, canvas.height);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, 30);
+        ctx.lineTo(canvas.width, 30);
+        ctx.stroke();
+
+        // Draw sample element
+        ctx.fillStyle = "#16a08550";
+        ctx.fillRect(100, 80, 150, 100);
+        ctx.strokeStyle = "#16a085";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(100, 80, 150, 100);
+
+        // Labels
+        ctx.fillStyle = "#2c3e50";
+        ctx.font = "bold 12px Arial";
+        ctx.fillText("Sample Element", 110, 130);
+
+        ctx.fillStyle = "#16a085";
+        ctx.fillText("offsetLeft: 70", 105, 200);
+        ctx.fillText("offsetTop: 50", 105, 220);
+        ctx.fillText("width: 150, height: 100", 105, 240);
+      }
+    </script>
+  </body>
+</html>
