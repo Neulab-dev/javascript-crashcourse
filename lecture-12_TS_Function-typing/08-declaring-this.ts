@@ -13,18 +13,18 @@ interface User {
 
 const user = {
   id: 123,
-
   admin: false,
+
   becomeAdmin: function () {
     this.admin = true;
   },
 };
 
 interface DB {
-  filterUsers(filter: (this: User) => boolean): User[];
+  filterUsers(filter: (this: User, id: number) => boolean): User[];
 }
 
 const db = getDB();
-const admins = db.filterUsers(function (this: User) {
+const admins = db.filterUsers(function(id) {
   return this.admin;
 });

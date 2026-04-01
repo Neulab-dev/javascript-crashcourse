@@ -4,7 +4,17 @@ function sum({ a, b, c }: { a: number; b: number; c: number }) {
 sum({ a: 10, b: 3, c: 9 });
 
 // Same as prior example
-type ABC = { a: number; b: number; c: number };
+// type ABC = { a: number; b: number; c: number };
+interface ABC { a: number; b: number; c: number };
 function sum_alias({ a, b, c }: ABC) {
   console.log(a + b + c);
 }
+
+function sum2(str: string, options: {
+  a?: number;
+  b?: number;
+  c?: number;
+  toggleable?: boolean;
+}) {}
+
+sum2("hello", { c: 9, a: 10, toggleable: true });

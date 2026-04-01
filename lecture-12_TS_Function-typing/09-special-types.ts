@@ -2,15 +2,29 @@ function f1(a: any) {
   a.b(); // OK
 }
 
+function prediate(a: any): a is { b: () => void } {
+  return typeof a === "object" && a != null && "b" in a;
+}
+
 function f2(a: unknown) {
-  a.b();
+  if (prediate(a)) {
+    a.b();
+  }
+
+  (a as { b: () => void }).b();
 }
 
 // object: any non-primitive value
 function f3(a: object) {
   // Can't access properties without type narrowing
-  a.b(); // Error
+  a.toString();
+  a.hasOwnProperty("foo");
+  a.valueOf();
 }
+
+const obj = {
+  foo: "bar",
+};
 
 // Object: similar to object, but includes primitives in some contexts
 function f4(a: Object) {
@@ -18,9 +32,11 @@ function f4(a: Object) {
   a.toString();
 }
 
+f4(obj);
+
 // {}: matches any value (similar to unknown but less safe)
 function f5(a: {}) {
-  a.b(); // Error - {} doesn't have property b
+  a.toString(); // Error - {} doesn't have property b
 }
 
 // never: impossible type, function never returns
