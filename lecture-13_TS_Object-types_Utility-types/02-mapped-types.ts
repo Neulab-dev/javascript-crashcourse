@@ -5,17 +5,31 @@ type MappedType = {
 enum Status {
     Active,
     Inactive = "inactive",
-    Pending = "pending"
+    Pending = "pending",
+    Completed = "completed"
 }
+
+type stringUnion = "active" | "inactive" | "pending";
 
 type StatusMap = {
     [key in Status]: string;
 };
 
+type StringUnionMap = {
+    [key in stringUnion]: string;
+};
+
+const stringUnionDescriptions: StringUnionMap = {
+    active: "The item is active.",
+    inactive: "The item is inactive.",
+    pending: "The item is pending."
+};
+
 const statusDescriptions: StatusMap = {
     [Status.Active]: "The item is active.",
     [Status.Inactive]: "The item is inactive.",
-    [Status.Pending]: "The item is pending."
+    [Status.Pending]: "The item is pending.",
+    [Status.Completed]: "The item is completed."
 };
 
 console.log(statusDescriptions.inactive);
@@ -26,12 +40,13 @@ type ReadonlyIndexType = {
 };
 
 type OptionalIndexType = {
-    [key in string]?: number;
+    [key in string]+?: number;
 }
 
 type RequiredIndexType = {
     [key in string]-?: number;
 }
+
 
 // --------------------------------
 
@@ -41,8 +56,12 @@ type OptionsFlags<Type> = {
 
 type Person = {
     name: string;
-    age: number;
+    age: string;
     email: string;
+    id: number;
 };
+type AgeType = Person["age"];
+
+type person = (Person[])[number];
 
 type PersonOptions = OptionsFlags<Person>;

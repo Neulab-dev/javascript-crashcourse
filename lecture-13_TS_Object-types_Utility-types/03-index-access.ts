@@ -11,3 +11,5 @@ type Age = Person[key];
 type AgeValid = Person[typeof key];
 
 type Age2 = Person["email"];
+
+const arr = ["a", "b", "c"] as const;
